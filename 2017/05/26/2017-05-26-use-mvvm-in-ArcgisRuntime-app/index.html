@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用MVVM模式开发Arcgis Runtime 程序 | RickerYan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="RickerYan,RickerYan's Blog" />
+  
+  <meta name="description" content="MVVM介绍MVVM是XAML程序开发中常用的设计模式，能够实现用户界面和数据、业务逻辑的完全分离。为实现分离MVVM将程序分割为以下三个类别。    Model - 程序中使用的数据模型。 View - 用户界面。 ViewModel-处理Model中的数据并为View提供业务逻辑。  理想的MVVM程序中，组件必须完全包含在这三个类别中。比如XAML页面中不应包含代码，同样所有与视图不直接相关">
+<meta name="keywords" content="MVVM,ArcgisRuntime">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用MVVM模式开发Arcgis Runtime 程序">
+<meta property="og:url" content="http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/index.html">
+<meta property="og:site_name" content="RickerYan">
+<meta property="og:description" content="MVVM介绍MVVM是XAML程序开发中常用的设计模式，能够实现用户界面和数据、业务逻辑的完全分离。为实现分离MVVM将程序分割为以下三个类别。    Model - 程序中使用的数据模型。 View - 用户界面。 ViewModel-处理Model中的数据并为View提供业务逻辑。  理想的MVVM程序中，组件必须完全包含在这三个类别中。比如XAML页面中不应包含代码，同样所有与视图不直接相关">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/mvvm1.png">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/mvvm2.png">
+<meta property="og:updated_time" content="2018-03-25T07:16:42.876Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用MVVM模式开发Arcgis Runtime 程序">
+<meta name="twitter:description" content="MVVM介绍MVVM是XAML程序开发中常用的设计模式，能够实现用户界面和数据、业务逻辑的完全分离。为实现分离MVVM将程序分割为以下三个类别。    Model - 程序中使用的数据模型。 View - 用户界面。 ViewModel-处理Model中的数据并为View提供业务逻辑。  理想的MVVM程序中，组件必须完全包含在这三个类别中。比如XAML页面中不应包含代码，同样所有与视图不直接相关">
+<meta name="twitter:image" content="http://oqfoa6gjo.bkt.clouddn.com/mvvm1.png">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">RickerYan&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        RickerYan&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        Reading, Coding, Thinking, Sharing
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="RickerYan" target="_blank" href="//yxqblog.tk">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/bayberryan">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-2017-05-26-use-mvvm-in-ArcgisRuntime-app" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      使用MVVM模式开发Arcgis Runtime 程序
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/ArcgisRuntime/">ArcgisRuntime</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-05-26
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h2 id="MVVM介绍"><a href="#MVVM介绍" class="headerlink" title="MVVM介绍"></a>MVVM介绍</h2><p>MVVM是XAML程序开发中常用的设计模式，能够实现用户界面和数据、业务逻辑的完全分离。<br>为实现分离MVVM将程序分割为以下三个类别。  </p>
+<ul>
+<li>Model - 程序中使用的数据模型。</li>
+<li>View - 用户界面。</li>
+<li>ViewModel-处理Model中的数据并为View提供业务逻辑。</li>
+</ul>
+<p>理想的MVVM程序中，组件必须完全包含在这三个类别中。比如XAML页面中不应包含代码，同样所有与视图不直接相关的代码都必须由ViewModel提供。数据绑定提供了支持在WPF中，Windows商店和Windows Phone应用程序允许使用XAML定义UI和将控件与视图ViewModel类所需的数据和功能绑定。</p>
+<p>一般来说，使用MVVM创建程序时，我们的大部分时间都花在ViewModel上。这些类提供提供界面使用的数据。ViewModel也可能包含处理用户界面事件和其他View需要的业务逻辑。</p>
+<p>MVVM模式文档很完备。该教程不是为讲述MVVM模式，而是介绍在其ArcGisRun Runtime SDK for .NET开发中的使用。要了解更多关于MVVM的内容，请参阅文末链接。</p>
+<h2 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h2><p>该教程需要Microsoft Visual Studio和 ArcGIS Runtime SDK for .NET.<br>SDK安装和系统需求请参阅以下链接<a href="https://developers.arcgis.com/net/10-2/desktop/guide/install-the-sdk.htm" target="_blank" rel="noopener">installing the SDK </a>and <a href="https://developers.arcgis.com/net/10-2/desktop/guide/system-requirements.htm" target="_blank" rel="noopener">system requirements</a>.</p>
+<p>需要了解 Visual Studio, XAML, and C# 。</p>
+<h2 id="创建WPF程序"><a href="#创建WPF程序" class="headerlink" title="创建WPF程序"></a>创建WPF程序</h2><p>使用Visual Studio创建一个WPF程序。</p>
+<ul>
+<li>打开Visual Studio。</li>
+<li>选择<strong>文件&gt;新建&gt;项目</strong>创建一个新的项目。</li>
+<li>在新建项目界面选择<strong>Windows Desktop &gt; WPF 程序</strong></li>
+</ul>
+<blockquote>
+<p>提示：<br>ArcGIS Runtime SDK for .NET 提供了项目模板：ArcGIS Runtime 10.2.7 for .NET App<br>使用模板创建项目会自动添加引用和带有mapvew的主页面。</p>
+</blockquote>
+<ul>
+<li>选择项目路径修改项目名称为MvvmApp。</li>
+<li>点击确定创建项目。</li>
+<li>右击项目下的引用添加Esri.ArcGISRuntime引用。</li>
+</ul>
+<p>Esri.ArcGISRuntime.dll包含mapcontrol和要用到的所有核心API。</p>
+<h2 id="添加Map"><a href="#添加Map" class="headerlink" title="添加Map"></a>添加Map</h2><p>本程序将加载ArcGIS Online 的影像底图和一个点图层。定义点的渲染方式和当前的视图范围。</p>
+<p>在XAML designer中使用ArcGISRuntime需要添加命名空间。</p>
+<ul>
+<li>在设计器中打开主页面MainWindow.xaml.</li>
+<li>添加以下命名空间</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlns:esri=&quot;http://schemas.esri.com/arcgis/runtime/2013&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在<grid>标签下添加以下xaml代码</grid></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;esri:MapView x:Name=&quot;MyMapView&quot;&gt;</span><br><span class="line">    &lt;esri:Map&gt;</span><br><span class="line">        &lt;esri:Map.InitialViewpoint&gt;</span><br><span class="line">            &lt;esri:ViewpointExtent XMin=&quot;-1631122.453&quot;  YMin=&quot;4253523.549&quot; 		    XMax=&quot;4163264.136&quot;  YMax=&quot;8976345.495&quot; /&gt;</span><br><span class="line">        &lt;/esri:Map.InitialViewpoint&gt;</span><br><span class="line">        &lt;esri:ArcGISTiledMapServiceLayer ID=&quot;BaseMap&quot; </span><br><span class="line">                ServiceUri=&quot;http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer&quot;/&gt;</span><br><span class="line">        &lt;esri:FeatureLayer ID=&quot;Incidents&quot;&gt;</span><br><span class="line">            &lt;esri:ServiceFeatureTable </span><br><span class="line">                ServiceUri=&quot;http://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0&quot;/&gt;</span><br><span class="line">            &lt;esri:FeatureLayer.Renderer&gt;</span><br><span class="line">                &lt;esri:SimpleRenderer&gt;</span><br><span class="line">                    &lt;esri:SimpleMarkerSymbol Color=&quot;Red&quot; Size=&quot;16&quot; Style=&quot;Triangle&quot;/&gt;</span><br><span class="line">                &lt;/esri:SimpleRenderer&gt;</span><br><span class="line">            &lt;/esri:FeatureLayer.Renderer&gt;</span><br><span class="line">        &lt;/esri:FeatureLayer&gt;</span><br><span class="line">        &lt;esri:GraphicsLayer ID=&quot;PointGraphics&quot;/&gt;</span><br><span class="line">    &lt;/esri:Map&gt;</span><br><span class="line">&lt;/esri:MapView&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>编译运行界面如下图。</p>
+<p> <img src="http://oqfoa6gjo.bkt.clouddn.com/mvvm1.png" alt=""></p>
+</li>
+</ul>
+<h2 id="移除地图数据"><a href="#移除地图数据" class="headerlink" title="移除地图数据"></a>移除地图数据</h2><p>为了将界面与数据和逻辑分离，我们移除mapview中的map。将其存储在程序的资源字典中，并使用数据绑定显示到界面。</p>
+<ul>
+<li>选择<a href="esri:MapView" target="_blank" rel="noopener">esri:MapView</a>标签下的所有内容》剪切。</li>
+<li>打开App.xaml文件。</li>
+<li>将剪切的代码粘贴到&lt;Application.Resources&gt;标签下。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;Application.Resources&gt;</span><br><span class="line">    &lt;esri:Map&gt;</span><br><span class="line">        &lt;esri:Map.InitialViewpoint&gt;</span><br><span class="line">            &lt;esri:ViewpointExtent XMin=&quot;-1631122.453&quot;  </span><br><span class="line">                            YMin=&quot;4253523.549&quot; </span><br><span class="line">                            XMax=&quot;4163264.136&quot;  </span><br><span class="line">                            YMax=&quot;8976345.495&quot; /&gt;</span><br><span class="line">        &lt;/esri:Map.InitialViewpoint&gt;</span><br><span class="line">        &lt;esri:ArcGISTiledMapServiceLayer ID=&quot;BaseMap&quot; </span><br><span class="line">                ServiceUri=&quot;http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer&quot;/&gt;</span><br><span class="line">        &lt;esri:FeatureLayer ID=&quot;Incidents&quot;&gt;</span><br><span class="line">            &lt;esri:ServiceFeatureTable </span><br><span class="line">                ServiceUri=&quot;http://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0&quot;/&gt;</span><br><span class="line">            &lt;esri:FeatureLayer.Renderer&gt;</span><br><span class="line">                &lt;esri:SimpleRenderer&gt;</span><br><span class="line">                    &lt;esri:SimpleMarkerSymbol Color=&quot;Red&quot; Size=&quot;16&quot; Style=&quot;Triangle&quot;/&gt;</span><br><span class="line">                &lt;/esri:SimpleRenderer&gt;</span><br><span class="line">            &lt;/esri:FeatureLayer.Renderer&gt;</span><br><span class="line">        &lt;/esri:FeatureLayer&gt;</span><br><span class="line">        &lt;esri:GraphicsLayer ID=&quot;PointGraphics&quot;/&gt;</span><br><span class="line">    &lt;/esri:Map&gt;</span><br><span class="line">&lt;/Application.Resources&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加ArcgisRuntime命名空间。</li>
+<li>给map添加x:Key属性并赋值IncidentMap。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;esri:Map x:Key=&quot;IncidentMap&quot;&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>x:Key 用与识别资源，作用范围内值应唯一</p>
+</blockquote>
+<ul>
+<li>返回主页面添加代码将IncidentMap资源绑定到mapview</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;esri:MapView x:Name=&quot;MyMapView&quot; Map=&quot;&#123;Binding Source=&#123;StaticResource IncidentMap&#125;&#125;&quot;&gt;           </span><br><span class="line">&lt;/esri:MapView&gt;</span><br></pre></td></tr></table></figure>
+<p>地图属性的数据绑定使用绑定标记扩展在XAML中指定。可以绑定应用程序中的资源，页面上的其他元素，或应用程序中提供数据的类。在XAML应用程序中对数据绑定的更多信息可以参阅<a href="https://msdn.microsoft.com/en-us/library/MS752347(v=vs.100" target="_blank" rel="noopener">数据绑定概述（MSDN）</a>.aspx)。</p>
+<ul>
+<li>编译运行，程序与之前相同。</li>
+</ul>
+<p>我们的程序现在实现MVVM模式了吗？还不是最理想的形式，app.xaml页面作为一个视图模型提供了一个可以绑定的地图。这说明使用该模式的优势之一，它清楚地将UI与实现细节分开。MapView是UI控件，属于页面。它包含的地图和图层是控件中显示的数据，该数据需要更改，并且应在UI之外进行管理。有了这个架构，页面和地图是松散耦合的，这意味着你可以很容易地改变一个不影响另一个。若要更改页中显示的地图，只需将绑定指向应用程序中可用的其他资源。</p>
+<p>为实现传统形式的MVVM模式，我们需要创建一个ViewModel类来充当页面的数据上下文，并公开用户界面可以绑定的数据和功能。</p>
+<h2 id="创建一个ViewModel类"><a href="#创建一个ViewModel类" class="headerlink" title="创建一个ViewModel类"></a>创建一个ViewModel类</h2><p>ViewModel提供视图可以通过数据绑定访问的数据和功能。一个视图对应一个视图模型是很常见的，但是多个些视图模型与单个视图关联并不多见。我们也可以有一个视图模型，该模型被应用程序中的几个不同视图使用。我们将创建一个单一的视图模型（mapviewmodel）提供的所有页面需要的数据和功能。</p>
+<ul>
+<li>右击项目》添加类：MapViewModel.cs.</li>
+<li>添加引用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">using Esri.ArcGISRuntime.Controls;</span><br><span class="line">using Esri.ArcGISRuntime.Layers;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加新的属性：IncidentMap。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private Map map;</span><br><span class="line">public Map IncidentMap</span><br><span class="line">&#123;</span><br><span class="line">    get &#123; return this.map; &#125;</span><br><span class="line">    set &#123; this.map = value; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>IncidentMap属性提供视图需要绑定的数据。</li>
+<li>添加构造函数、初始化地图</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public MapViewModel()</span><br><span class="line">&#123;</span><br><span class="line">    // when the view model initializes, read the map from the App.xaml resources</span><br><span class="line">    this.map = App.Current.Resources[&quot;IncidentMap&quot;] as Map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="绑定ViewModel到View"><a href="#绑定ViewModel到View" class="headerlink" title="绑定ViewModel到View"></a>绑定ViewModel到View</h2><p>为了关联ViewModel和View，我们需要将View的DataContext属性设置为ViewModel的一个实例。可以使用xaml或view的codebehind设置。以下步骤使用xaml将viewmodel中的incidentmap绑定到view中mapview的map属性</p>
+<ul>
+<li>打开app.xaml。添加本地程序集xaml命名空间</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;Application x:Class=&quot;MvvmApp.App&quot;</span><br><span class="line">             xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;</span><br><span class="line">             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;</span><br><span class="line">             xmlns:esri=&quot;http://schemas.esri.com/arcgis/runtime/2013&quot;</span><br><span class="line">             xmlns:local=&quot;clr-namespace:MvvmApp&quot;</span><br><span class="line">             StartupUri=&quot;MainWindow.xaml&quot;&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在Application.Resources 标签IncidentMap定义后添加xanl定义一个MapViewModel对象并赋值X:key为MapVM</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;local:MapViewModel x:Key=&quot;MapVM&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开MainWindow.xaml 设置整个页面的DataContext绑定MapVM对象。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;Window x:Class=&quot;MvvmApp.MainWindow&quot;</span><br><span class="line">        xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;</span><br><span class="line">        xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;</span><br><span class="line">        xmlns:esri=&quot;http://schemas.esri.com/arcgis/runtime/2013&quot;</span><br><span class="line">        Title=&quot;MainWindow&quot; Height=&quot;350&quot; Width=&quot;525&quot;</span><br><span class="line">        DataContext=&quot;&#123;Binding Source=&#123;StaticResource MapVM&#125;&#125;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>一旦ViewModel设置为整个页面的DataContext，页面上的任一控件都可绑定ViewModel暴露出的属性。</p>
+<ul>
+<li>修改mapview的绑定声明。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;esri:MapView x:Name=&quot;MyMapView&quot; Map=&quot;&#123;Binding IncidentMap&#125;&quot;&gt;           </span><br><span class="line">&lt;/esri:MapView&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译运行，地图和在页面中直接定义时相同。</li>
+</ul>
+<p>使用这种模式显示地图的优势是什么？无论我们在哪里定义地图，应用程序看起来都是一样的，但使用ViewModel似乎增加了很多复杂性。对于这样一个简单的应用程序，使用MVVM模式的确没有优势。但当应用程序变得更加复杂时，你会发现MVVM架构使应用程序更容易维护并促进应用程序之间共享代码。</p>
+<h2 id="在ViewModel中处理点击事件"><a href="#在ViewModel中处理点击事件" class="headerlink" title="在ViewModel中处理点击事件"></a>在ViewModel中处理点击事件</h2><p>在视图模型中保存数据并将其绑定到UI很简单，但是关于视图函数和功能呢？</p>
+<p>如果完全实现MVVM模式，所有的业务逻辑都应包含在ViewModel中。页面的codebehind也不应包含事件代码。幸运的是，数据绑定还可以将View中的控件事件绑定到ViewModel中的代码。</p>
+<h2 id="执行Command"><a href="#执行Command" class="headerlink" title="执行Command"></a>执行Command</h2><p>一些控件，如按钮、复选框、单选按钮和菜单项，提供了一个Command属性。Command是自定义类，实现ICommand接口。定义当一个控件点击时的事件（执行方法），并确定何时应该启用（执行方法）。可以在视图模型中创建Command，并绑定到相应控件的Command属性。</p>
+<blockquote>
+<p>提示：<br>现在有很多MVVM的框架提供了ICommand的实现。使用这些框架时，我们可以在视图模型中实例化命令对象，而不必创建本节所描述的自己的命令类的中间步骤。如果计划广泛使用MVVM，可以考虑使用框架开发应用程序，如<a href="http://mvvmlight.codeplex.com/" target="_blank" rel="noopener">MVVMLight</a>。</p>
+</blockquote>
+<ul>
+<li><p>新建类并命名DelegateCommand.cs。</p>
+</li>
+<li><p>添加命名空间System.Windows.Input</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">using System.Windows.Input;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在 DelegateCommand类中实现Icommand接口。完整的实现代码如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">class DelegateCommand : System.Windows.Input.ICommand</span><br><span class="line">&#123;</span><br><span class="line">    // a var to store the command&apos;s execute logic (button click, for example)</span><br><span class="line">    private readonly Action&lt;object&gt; execute;</span><br><span class="line"></span><br><span class="line">    // a var to store the command&apos;s logic for enabling/disabling</span><br><span class="line">    private readonly Func&lt;object, bool&gt; canExecute;</span><br><span class="line"></span><br><span class="line">    // an event for when the value of &quot;CanExecute&quot; changes (not implemented)</span><br><span class="line">    public event EventHandler CanExecuteChanged;</span><br><span class="line"></span><br><span class="line">    // constructor: store the logic for executing and enabling the command</span><br><span class="line">    public DelegateCommand(Action&lt;object&gt; executeAction, Func&lt;object, bool&gt; canExecuteFunc = null)</span><br><span class="line">    &#123;</span><br><span class="line">        this.canExecute = canExecuteFunc;</span><br><span class="line">        this.execute = executeAction;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // if it was passed in, execute the enabling logic for the command</span><br><span class="line">    public bool CanExecute(object parameter)</span><br><span class="line">    &#123;</span><br><span class="line">        if (this.canExecute == null) &#123; return true; &#125;</span><br><span class="line"></span><br><span class="line">        return this.canExecute(parameter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // execute the command logic </span><br><span class="line">    public void Execute(object parameter)</span><br><span class="line">    &#123;</span><br><span class="line">        this.execute(parameter);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当需要绑定一个按钮和命令时，创建一个delegatecommand实例传递事件命令的执行和控件到构造函数。执行操作的参数是object类型，以给命令提供最大的灵活性。</p>
+<ul>
+<li>保存和关闭DelegateCommand.cs。</li>
+</ul>
+<h2 id="在ViewModel中创建Command属性"><a href="#在ViewModel中创建Command属性" class="headerlink" title="在ViewModel中创建Command属性"></a>在ViewModel中创建Command属性</h2><p>任何需要绑定的内容都必须是public的属性。下一步我们将创建MapViewModel的一个新属性返回一个DelegateCommand 对象。该命令被定义为执行和启用逻辑，因此它可以绑定到视图中的按钮。</p>
+<ul>
+<li>打开MapViewModel类定义一个public属性：ToggleLayerCommand 返回一个DelegateCommand对象。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public DelegateCommand ToggleLayerCommand &#123; get; set; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建一个新的函数响应命令执行，命名togglelayer。该函数控制map中图层的可见性。输入参数指定要修改的图层名称。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private void ToggleLayer(object parameter)</span><br><span class="line">&#123;</span><br><span class="line">    var lyr = this.map.Layers[parameter.ToString()];</span><br><span class="line">    lyr.IsVisible = !(lyr.IsVisible);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建另一个新的函数来确定Command的执行状态。由于命令修改一个特定的图层，只有当图层存在时才可执行。参数与上一个函数相同。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">private bool OkToExecute(object parameter)</span><br><span class="line">&#123;</span><br><span class="line">    var lyr = this.map.Layers[parameter.ToString()] as FeatureLayer;</span><br><span class="line">    return (lyr != null);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果指定名称的图层不存在，oktoexecute返回false，禁用相关的控件。</p>
+<ul>
+<li>在mapviewmodel的构造函数，添加以下代码行来实例化togglelayercommand。传递thetogglelayer函数作为命令的执行逻辑、oktoexecute为enable逻辑。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public MapViewModel()</span><br><span class="line">&#123;</span><br><span class="line">    // when the view model initializes, read the map from the App.xaml resources</span><br><span class="line">    this.map = MvvmApp.App.Current.Resources[&quot;IncidentMap&quot;] as Map;</span><br><span class="line">    ToggleLayerCommand = new DelegateCommand(ToggleLayer, OkToExecute);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>##绑定一个button到ViewModel的Command</p>
+<p>按钮提供一个可执行代码的单击事件。指定一个Command定义按钮单击的代码，它的优点是还包含了指示按钮何时启用或禁用的逻辑。一个按钮对象的Command属性都可以绑定到实现ICommand接口的对象。</p>
+<ul>
+<li>在MainWindow.xaml 页面添加一个新的button</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Button Height=&quot;30&quot; Width=&quot;70&quot; </span><br><span class="line">        HorizontalAlignment=&quot;Left&quot; VerticalAlignment=&quot;Bottom&quot; </span><br><span class="line">        Content=&quot;Toggle&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置button的Command属性绑定到view model的ToggleLayerCommand属性。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Button Height=&quot;30&quot; Width=&quot;70&quot; </span><br><span class="line">        HorizontalAlignment=&quot;Left&quot; VerticalAlignment=&quot;Bottom&quot; </span><br><span class="line">        Content=&quot;Toggle&quot; </span><br><span class="line">        Command=&quot;&#123;Binding ToggleLayerCommand&#125;&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置按钮的commandparameter属性值，为Command提供参数。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Button Height=&quot;30&quot; Width=&quot;70&quot; </span><br><span class="line">        HorizontalAlignment=&quot;Left&quot; VerticalAlignment=&quot;Bottom&quot; </span><br><span class="line">        Content=&quot;Toggle&quot; </span><br><span class="line">        Command=&quot;&#123;Binding ToggleLayerCommand&#125;&quot;</span><br><span class="line">        CommandParameter=&quot;Incidents&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译运行，点击Toggle按钮控制incidents图层的可见性。</li>
+</ul>
+<h2 id="在ViewModel中处理其他事件"><a href="#在ViewModel中处理其他事件" class="headerlink" title="在ViewModel中处理其他事件"></a>在ViewModel中处理其他事件</h2><p>前面描述的视图模型中绑定命令的过程适用于提供所需命令属性的控件。如果需要处理其他不能直接使用命令属性绑定的事件，该怎么办？幸运的是，.NET提供了额外的类，可以将视图中的事件绑定到视图模型中的命令或函数。</p>
+<p>在下面的步骤中，将使用system.windows.interactivity的类来处理MapView的ExtentChanged事件。</p>
+<ul>
+<li>选择**项目》添加引用，添加System.Windows.Interactivity引用</li>
+</ul>
+<blockquote>
+<p>提示：<br>如果引用不存在需要安装<a href="http://www.microsoft.com/en-us/download/details.aspx?id=22829" target="_blank" rel="noopener">Microsoft Expression Blend SDK</a>.或在NuGet中搜索“blend”下载。</p>
+</blockquote>
+<ul>
+<li>打开MainWindow.xaml在<window>标签内添加以下xaml命名空间。</window></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlns:interactivity=&quot;http://schemas.microsoft.com/expression/2010/interactivity&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>MapView 标签下添加以下xaml定义ExtentChanged事件的触发器。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;esri:MapView x:Name=&quot;MyMapView&quot; Map=&quot;&#123;Binding IncidentMap&#125;&quot;&gt;</span><br><span class="line">    &lt;interactivity:Interaction.Triggers&gt;</span><br><span class="line">        &lt;interactivity:EventTrigger EventName=&quot;ExtentChanged&quot;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;/interactivity:EventTrigger&gt;</span><br><span class="line">    &lt;/interactivity:Interaction.Triggers&gt;</span><br><span class="line">&lt;/esri:MapView&gt;</span><br></pre></td></tr></table></figure>
+<p>可以使用一个函数（方法）或一个命令对象来响应事件。因为需要一个参数（MapView），所以使用command并提供一个CommandParameter将当前视图范围传递到view model</p>
+<ul>
+<li>添加以下xaml定义InvokeCommandAction响应事件。ViewModel中还不存在ExtentChangedCommand，我们稍后创建。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;interactivity:InvokeCommandAction </span><br><span class="line">    Command=&quot;&#123;Binding ExtentChangedCommand&#125;&quot;</span><br><span class="line">    CommandParameter=&quot;&#123;Binding ElementName=MyMapView&#125;&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开MapViewModel.cs添加以下代码定义一个DelegateCommand对象并命名为ExtentChangedCommand</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public DelegateCommand ExtentChangedCommand &#123; get; set; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加以下函数响应视图范围改变。现在需要确保能获取到 mapview的视图范围。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void MyMapViewExtentChanged(object parameter)</span><br><span class="line">&#123;</span><br><span class="line">    var mv = parameter as MapView;</span><br><span class="line">    var extent = mv.Extent;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在构造函数中添加以下代码实例化ExtentChangedCommand.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public MapViewModel()</span><br><span class="line">&#123;</span><br><span class="line">    // when the view model initializes, read the map from the App.xaml resources</span><br><span class="line">    this.map = MvvmApp.App.Current.Resources[&quot;IncidentMap&quot;] as Map;</span><br><span class="line">    ToggleLayerCommand = new DelegateCommand(ToggleLayer, OkToExecute);</span><br><span class="line">    ExtentChangedCommand = new DelegateCommand(MyMapViewExtentChanged);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DelegateCommand中的是否可执行逻辑是可选的，所以我们没有指定它。</p>
+<ul>
+<li>在MyMapViewExtentChanged函数最后一行添加断点，运行程序，看是否命中断点查看获取的mapview范围。测试完毕后移除断点。</li>
+</ul>
+<p>至此我们已经完成了在ViewModel中处理视图范围更改事件的绑定。以上过程可以用来处理所有界面控件的事件，包括不提供Command属性的控件。</p>
+<h2 id="绑定视图的范围值"><a href="#绑定视图的范围值" class="headerlink" title="绑定视图的范围值"></a>绑定视图的范围值</h2><p>要在应用程序中显示当前范围的坐标，需要在ViewModel上创建新公共属性以公开该信息。然后可以将属性绑定到用户界面元素，如文本框。</p>
+<ul>
+<li>打开MapViewModel.cs添加以下代码定义一个CurrentExtentString属性。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private string extentString;</span><br><span class="line">public string CurrentExtentString </span><br><span class="line">&#123; </span><br><span class="line">    get </span><br><span class="line">    &#123; </span><br><span class="line">        return this.extentString; </span><br><span class="line">    &#125; </span><br><span class="line">    set </span><br><span class="line">    &#123; </span><br><span class="line">        this.extentString = value;  </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在MyMapViewExtentChanged中添加以下代码设置CurrentExtentString的值</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void MyMapViewExtentChanged(object parameter)</span><br><span class="line">&#123;</span><br><span class="line">    var mv = parameter as MapView;</span><br><span class="line">    var extent = mv.Extent;</span><br><span class="line">    CurrentExtentString = string.Format(&quot;XMin=&#123;0:F2&#125; YMin=&#123;1:F2&#125; XMax=&#123;2:F2&#125; YMax=&#123;3:F2&#125;&quot;, </span><br><span class="line">                                            extent.XMin, extent.YMin, extent.XMax, extent.YMax);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>视图范围描述格式如下: </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XMin=-2598746.47 YMin=4253523.55 XMax=5130888.16 YMax=8976345.50.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开MainWindow.xaml在mapview下添加以下xaml定义一个TextBlock用来显示当前试图范围。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;TextBlock Height=&quot;30&quot; Width=&quot;Auto&quot; </span><br><span class="line">            FontSize=&quot;16&quot; Foreground=&quot;AliceBlue&quot;</span><br><span class="line">            HorizontalAlignment=&quot;Center&quot; VerticalAlignment=&quot;Bottom&quot;</span><br><span class="line">            Text=&quot;&#123;Binding CurrentExtentString&#125;&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行程序，发现范围描述并没有按预期显示出来。</li>
+</ul>
+<p>为使数据绑定按预期工作，必须在绑定的属性梗概是触发notification事件。当前情况下在更改视图范围属性前就已经将其绑定到界面文本。当属性值更新时从未通知界面获取更新值，所以界面文本不会改变。</p>
+<p>如果是这样的话，为什么绑定的地图工作？ViewModel的incidentmap属性设置在类的构造函数中，设置页面的数据上下文之前就已经赋值。</p>
+<p>为了实现属性值改变的通知，我们需要实现System.ComponentModel 命名空间下的 INotifyPropertyChanged 接口。</p>
+<ul>
+<li>在MapViewModel中添加以下引用。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">using System.ComponentModel;</span><br><span class="line">using System.Runtime.CompilerServices;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在MapViewModel中实现INotifyPropertyChanged接口</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class MapViewModel : INotifyPropertyChanged</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加以下代码实现PropertyChangedEventHandler</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public event PropertyChangedEventHandler PropertyChanged;</span><br><span class="line">private void RaiseNotifyPropertyChanged([CallerMemberName]string propertyName = null)</span><br><span class="line">&#123;</span><br><span class="line">    if (PropertyChanged != null)</span><br><span class="line">    &#123;</span><br><span class="line">        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在currentextentstring属性的set访问器中调用RaiseNotifyPropertyChanged函数触发notification。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">private string extentString;</span><br><span class="line">public string CurrentExtentString </span><br><span class="line">&#123; </span><br><span class="line">    get </span><br><span class="line">    &#123; </span><br><span class="line">        return this.extentString; </span><br><span class="line">    &#125; </span><br><span class="line">    set </span><br><span class="line">    &#123; </span><br><span class="line">        this.extentString = value; </span><br><span class="line">        this.RaiseNotifyPropertyChanged(); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行程序。当前视图范围显示在地图底部。</li>
+</ul>
+<p><img src="http://oqfoa6gjo.bkt.clouddn.com/mvvm2.png" alt=""></p>
+<p>至此我们已完成了整个教程。如果你按此教程自己动手实现了。那么你应该对如何创建MVVM模式的ArcgisRuntime应用有了自己的理解。包括：数据绑定、Command、事件触发、属性变更通知。为了体会MVVM模式的有效性。你可以新建一个项目（也可以是其他.net平台），在不同界面下重用本例的ViewModel和Command。</p>
+<h2 id="本教程源码："><a href="#本教程源码：" class="headerlink" title="本教程源码："></a>本教程源码：</h2><p><a href="https://github.com/bayberryan/ArcgisRuntime_MVVM_Demo" target="_blank" rel="noopener">ArcGisRuntime_MVVM_Demo</a></p>
+<h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>要了解更多关于MVVM的知识请参阅以下链接：</p>
+<ul>
+<li><a href="https://msdn.microsoft.com/en-us/library/MS752347(v=vs.100" target="_blank" rel="noopener">Data binding overview (MSDN)</a>.aspx)</li>
+<li><a href="http://www.codeproject.com/articles/278901/mvvm-pattern-made-simple" target="_blank" rel="noopener">MVVM pattern made simple (CodeProject)</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/magazine/dn237302.aspx" target="_blank" rel="noopener">MVVM Commands (MSDN)</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx" target="_blank" rel="noopener">INotifyPropertyChanged (.Net Documentation)</a></li>
+<li><a href="https://mvvmlight.codeplex.com/" target="_blank" rel="noopener">MVVM Light toolkit (CodePlex)</a></li>
+<li><a href="https://github.com/caliburn-micro" target="_blank" rel="noopener">Caliburn.Micro framework (GitHub)</a></li>
+</ul>
+<p>原文地址：<a href="https://developers.arcgis.com/net/10-2/desktop/guide/use-the-mvvm-design-pattern.htm" target="_blank" rel="noopener">https://developers.arcgis.com/net/10-2/desktop/guide/use-the-mvvm-design-pattern.htm</a></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2018年03月25日 15:16</p>
+        <p>原始链接： <a class="post-url" href="/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/" title="使用MVVM模式开发Arcgis Runtime 程序">http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/</a></p>
+        <footer>
+            <a href="http://yxqblog.tk">
+                <img src="/images/logo.png" alt="RickerYan">
+                RickerYan
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        打赏作者~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/&title=《使用MVVM模式开发Arcgis Runtime 程序》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/mvvm1.png?imageslim" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/&title=《使用MVVM模式开发Arcgis Runtime 程序》 — RickerYan&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用MVVM模式开发Arcgis Runtime 程序》 — RickerYan&url=http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/&via=http://yxqblog.tk" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/MVVM/" class="color5">MVVM</a>
+      
+    <a href="/tags/ArcgisRuntime/" class="color4">ArcgisRuntime</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVVM介绍"><span class="post-toc-text">MVVM介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#先决条件"><span class="post-toc-text">先决条件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建WPF程序"><span class="post-toc-text">创建WPF程序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#添加Map"><span class="post-toc-text">添加Map</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#移除地图数据"><span class="post-toc-text">移除地图数据</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建一个ViewModel类"><span class="post-toc-text">创建一个ViewModel类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#绑定ViewModel到View"><span class="post-toc-text">绑定ViewModel到View</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#在ViewModel中处理点击事件"><span class="post-toc-text">在ViewModel中处理点击事件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#执行Command"><span class="post-toc-text">执行Command</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#在ViewModel中创建Command属性"><span class="post-toc-text">在ViewModel中创建Command属性</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#在ViewModel中处理其他事件"><span class="post-toc-text">在ViewModel中处理其他事件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#绑定视图的范围值"><span class="post-toc-text">绑定视图的范围值</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本教程源码："><span class="post-toc-text">本教程源码：</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解更多"><span class="post-toc-text">了解更多</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2017/06/21/2017-06-21-cpp-call-webservice/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          QT调用WebService的尝试和最终实现
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2017/04/20/2017-04-20-ArcMap-Ploygon-EliminatePart/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">ArcMap面要素处理之消除面部分(EliminatePolygonPart)</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+          <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2135289"></script>
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2018 <a href="https://github.com/bayberryan"> RickerYan</a><br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yxqblog.tk",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/ArcMap/">ArcMap</a><a class="category-link" href="/categories/ArcgisRuntime/">ArcgisRuntime</a><a class="category-link" href="/categories/QT/">QT</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/ArcMap/" style="font-size: 20px;">ArcMap</a> <a href="/tags/ArcgisRuntime/" style="font-size: 10px;">ArcgisRuntime</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Gp/" style="font-size: 20px;">Gp</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Polygon/" style="font-size: 20px;">Polygon</a> <a href="/tags/QT/" style="font-size: 10px;">QT</a> <a href="/tags/WebService/" style="font-size: 10px;">WebService</a> <a href="/tags/gsoap/" style="font-size: 10px;">gsoap</a> <a href="/tags/qtsoap/" style="font-size: 10px;">qtsoap</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/ArcMap/" style="font-size: 20px;">ArcMap</a> <a href="/tags/ArcgisRuntime/" style="font-size: 10px;">ArcgisRuntime</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Gp/" style="font-size: 20px;">Gp</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Polygon/" style="font-size: 20px;">Polygon</a> <a href="/tags/QT/" style="font-size: 10px;">QT</a> <a href="/tags/WebService/" style="font-size: 10px;">WebService</a> <a href="/tags/gsoap/" style="font-size: 10px;">gsoap</a> <a href="/tags/qtsoap/" style="font-size: 10px;">qtsoap</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ArcMap面要素处理之消除(Eliminate) | RickerYan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="RickerYan,RickerYan's Blog" />
+  
+  <meta name="description" content="摘要通过将面与具有最大面积或最长公用边界的邻近面合并来消除面。消除通常用于移除叠加操作（如相交或联合）所生成的小的狭长面。 插图 用法 要消除的要素由应用于面图层的选择内容决定。必须在之前的步骤中使用[按属性选择图层]或[按位置选择图层]或者通过查询 ArcMap 中的地图图层来确定选择内容。 通过删除公用边界来仅将所选面与邻近的未选定面进行合并。所选面将不与邻近的选定面合并。 输入图层必须包含选">
+<meta name="keywords" content="ArcMap,Polygon,Gp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArcMap面要素处理之消除(Eliminate)">
+<meta property="og:url" content="http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/index.html">
+<meta property="og:site_name" content="RickerYan">
+<meta property="og:description" content="摘要通过将面与具有最大面积或最长公用边界的邻近面合并来消除面。消除通常用于移除叠加操作（如相交或联合）所生成的小的狭长面。 插图 用法 要消除的要素由应用于面图层的选择内容决定。必须在之前的步骤中使用[按属性选择图层]或[按位置选择图层]或者通过查询 ArcMap 中的地图图层来确定选择内容。 通过删除公用边界来仅将所选面与邻近的未选定面进行合并。所选面将不与邻近的选定面合并。 输入图层必须包含选">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/eliminate.gif">
+<meta property="og:updated_time" content="2018-03-25T07:16:51.850Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ArcMap面要素处理之消除(Eliminate)">
+<meta name="twitter:description" content="摘要通过将面与具有最大面积或最长公用边界的邻近面合并来消除面。消除通常用于移除叠加操作（如相交或联合）所生成的小的狭长面。 插图 用法 要消除的要素由应用于面图层的选择内容决定。必须在之前的步骤中使用[按属性选择图层]或[按位置选择图层]或者通过查询 ArcMap 中的地图图层来确定选择内容。 通过删除公用边界来仅将所选面与邻近的未选定面进行合并。所选面将不与邻近的选定面合并。 输入图层必须包含选">
+<meta name="twitter:image" content="http://oqfoa6gjo.bkt.clouddn.com/eliminate.gif">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">RickerYan&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        RickerYan&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        Reading, Coding, Thinking, Sharing
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="RickerYan" target="_blank" href="//yxqblog.tk">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/bayberryan">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-2017-03-24-ArcMap-Ploygon-Eliminate" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      ArcMap面要素处理之消除(Eliminate)
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/ArcMap/">ArcMap</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-03-24
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>通过将面与具有最大面积或最长公用边界的邻近面合并来消除面。消除通常用于移除叠加操作（如相交或联合）所生成的小的狭长面。</p>
+<h2 id="插图"><a href="#插图" class="headerlink" title="插图"></a>插图</h2><p><img src="http://oqfoa6gjo.bkt.clouddn.com/eliminate.gif" alt=""></p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ul>
+<li>要消除的要素由应用于面图层的选择内容决定。必须在之前的步骤中使用[按属性选择图层]或[按位置选择图层]或者通过查询 ArcMap 中的地图图层来确定选择内容。</li>
+<li>通过删除公用边界来仅将所选面与邻近的未选定面进行合并。所选面将不与邻近的选定面合并。</li>
+<li>输入图层必须包含选择内容；否则，消除将失败。</li>
+<li>排除表达式和排除图层不会相互排斥，可将二者结合使用以对要消除的要素进行全面控制。</li>
+</ul>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Eliminate_management (in_features, out_feature_class, &#123;selection&#125;, &#123;ex_where_clause&#125;, &#123;ex_features&#125;)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>数据类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>in_features</td>
+<td>其中的面将与邻近面进行合并的图层。</td>
+<td>Feature Layer</td>
+</tr>
+<tr>
+<td>out_feature_class</td>
+<td>待创建的要素类。</td>
+<td>Feature Class</td>
+</tr>
+<tr>
+<td>selection(可选)</td>
+<td>这些选项可指定将要使用的消除要素的方法。LENGTH —通过删除公用边界将所选面与邻近的未选定面合并。该邻近面的公用边界最长。这是默认设置。AREA —通过删除公用边界将所选面与邻近的未选定面合并。该邻近面的面积最大。</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>ex_where_clause(可选)</td>
+<td>用于识别不会被更改的要素的 SQL 表达式。</td>
+<td>SQL Expression</td>
+</tr>
+<tr>
+<td>ex_features(可选)</td>
+<td>定义不应被消除的面边界（或部分）的输入折线 (polyline)、面要素类或图层。</td>
+<td>Feature Layer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><h3 id="消除示例（Python-窗口）"><a href="#消除示例（Python-窗口）" class="headerlink" title="消除示例（Python 窗口）"></a>消除示例（Python 窗口）</h3><p>以下 Python 窗口脚本演示了如何在即时模式下使用“消除”工具。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import arcpy</span><br><span class="line">arcpy.env.workspace = &quot;C:/data/Portland.gdb/Census&quot;</span><br><span class="line">arcpy.MakeFeatureLayer_management(&quot;blockgrp&quot;, &quot;blocklayer&quot;)</span><br><span class="line">arcpy.SelectLayerByAttribute_management(&quot;blocklayer&quot;, &quot;NEW_SELECTION&quot;, </span><br><span class="line">                                        &apos;&quot;Area_Sq_Miles&quot; &lt; 0.15&apos;)</span><br><span class="line">arcpy.Eliminate_management(&quot;blocklayer&quot;, &quot;C:/output/output.gdb/eliminate_output&quot;, </span><br><span class="line">                           &quot;LENGTH&quot;, &apos;&quot;OBJECTID&quot; = 9&apos;)</span><br></pre></td></tr></table></figure>
+<h3 id="消除示例-2（独立脚本）"><a href="#消除示例-2（独立脚本）" class="headerlink" title="消除示例 2（独立脚本）"></a>消除示例 2（独立脚本）</h3><p>以下独立脚本演示了如何使用“消除”工具。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># Name: Eliminate_Example2.py</span><br><span class="line"># Description: Eliminate features based on a selection.</span><br><span class="line"> </span><br><span class="line"># Import system modules</span><br><span class="line">import arcpy</span><br><span class="line"> </span><br><span class="line"># Set environment settings</span><br><span class="line">arcpy.env.workspace = &quot;C:/data/Portland.gdb/Census&quot;</span><br><span class="line"> </span><br><span class="line"># Set local variables</span><br><span class="line">inFeatures = &quot;blockgrp&quot;</span><br><span class="line">tempLayer = &quot;blocklayer&quot;</span><br><span class="line">expression = &apos;&quot;Area_Sq_Miles&quot; &lt; 0.15&apos;</span><br><span class="line">outFeatureClass = &quot;C:/output/output.gdb/eliminate_output&quot;</span><br><span class="line">exclusionExpression = &apos;&quot;OBJECTID&quot; = 9&apos;</span><br><span class="line"> </span><br><span class="line"># Execute MakeFeatureLayer</span><br><span class="line">arcpy.MakeFeatureLayer_management(inFeatures, tempLayer)</span><br><span class="line"> </span><br><span class="line"># Execute SelectLayerByAttribute to define features to be eliminated</span><br><span class="line">arcpy.SelectLayerByAttribute_management(tempLayer, &quot;NEW_SELECTION&quot;, expression)</span><br><span class="line"> </span><br><span class="line"># Execute Eliminate</span><br><span class="line">arcpy.Eliminate_management(tempLayer, outFeatureClass, &quot;LENGTH&quot;, </span><br><span class="line">                           exclusionExpression)</span><br></pre></td></tr></table></figure></p>
+<h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>要了解更多关于ArcMap的知识请参阅以下链接：</p>
+<ul>
+<li><a href="http://desktop.arcgis.com/zh-cn/arcmap" target="_blank" rel="noopener">desktop.arcgis.com</a></li>
+</ul>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2018年03月25日 15:16</p>
+        <p>原始链接： <a class="post-url" href="/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/" title="ArcMap面要素处理之消除(Eliminate)">http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/</a></p>
+        <footer>
+            <a href="http://yxqblog.tk">
+                <img src="/images/logo.png" alt="RickerYan">
+                RickerYan
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        打赏作者~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/&title=《ArcMap面要素处理之消除(Eliminate)》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/eliminate.gif?imageslim" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/&title=《ArcMap面要素处理之消除(Eliminate)》 — RickerYan&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ArcMap面要素处理之消除(Eliminate)》 — RickerYan&url=http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/&via=http://yxqblog.tk" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2017/03/24/2017-03-24-ArcMap-Ploygon-Eliminate/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/ArcMap/" class="color2">ArcMap</a>
+      
+    <a href="/tags/Polygon/" class="color3">Polygon</a>
+      
+    <a href="/tags/Gp/" class="color3">Gp</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#摘要"><span class="post-toc-text">摘要</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#插图"><span class="post-toc-text">插图</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#用法"><span class="post-toc-text">用法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#语法"><span class="post-toc-text">语法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代码实例"><span class="post-toc-text">代码实例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消除示例（Python-窗口）"><span class="post-toc-text">消除示例（Python 窗口）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消除示例-2（独立脚本）"><span class="post-toc-text">消除示例 2（独立脚本）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解更多"><span class="post-toc-text">了解更多</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2017/04/20/2017-04-20-ArcMap-Ploygon-EliminatePart/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          ArcMap面要素处理之消除面部分(EliminatePolygonPart)
+        
+      </span>
+    </a>
+  
+  
+</nav>
+
+
+
+    
+          <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2135289"></script>
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2018 <a href="https://github.com/bayberryan"> RickerYan</a><br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yxqblog.tk",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/ArcMap/">ArcMap</a><a class="category-link" href="/categories/ArcgisRuntime/">ArcgisRuntime</a><a class="category-link" href="/categories/QT/">QT</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/ArcMap/" style="font-size: 20px;">ArcMap</a> <a href="/tags/ArcgisRuntime/" style="font-size: 10px;">ArcgisRuntime</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Gp/" style="font-size: 20px;">Gp</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Polygon/" style="font-size: 20px;">Polygon</a> <a href="/tags/QT/" style="font-size: 10px;">QT</a> <a href="/tags/WebService/" style="font-size: 10px;">WebService</a> <a href="/tags/gsoap/" style="font-size: 10px;">gsoap</a> <a href="/tags/qtsoap/" style="font-size: 10px;">qtsoap</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/ArcMap/" style="font-size: 20px;">ArcMap</a> <a href="/tags/ArcgisRuntime/" style="font-size: 10px;">ArcgisRuntime</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Gp/" style="font-size: 20px;">Gp</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Polygon/" style="font-size: 20px;">Polygon</a> <a href="/tags/QT/" style="font-size: 10px;">QT</a> <a href="/tags/WebService/" style="font-size: 10px;">WebService</a> <a href="/tags/gsoap/" style="font-size: 10px;">gsoap</a> <a href="/tags/qtsoap/" style="font-size: 10px;">qtsoap</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

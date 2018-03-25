@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>QT调用WebService的尝试和最终实现 | RickerYan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="RickerYan,RickerYan's Blog" />
+  
+  <meta name="description" content="最近接触的QT项目与平台对接时需要用到WebService。博主从毕业起大部分工作都是在做桌面开发，所以对WebService只能说是一知半解。唯一的接触就是在.NET平台下编写，发布和调用WebService。这其中大部分工作微软都帮我们做好了，我们只需添加web引用，就像引用本地的库一样。不得不说VS确实强大且易用性好。但是很多事情都是两面性的。就像现在习惯了vs的方便，当面临linux">
+<meta name="keywords" content="QT,C++,qtsoap,gsoap,WebService">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QT调用WebService的尝试和最终实现">
+<meta property="og:url" content="http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/index.html">
+<meta property="og:site_name" content="RickerYan">
+<meta property="og:description" content="最近接触的QT项目与平台对接时需要用到WebService。博主从毕业起大部分工作都是在做桌面开发，所以对WebService只能说是一知半解。唯一的接触就是在.NET平台下编写，发布和调用WebService。这其中大部分工作微软都帮我们做好了，我们只需添加web引用，就像引用本地的库一样。不得不说VS确实强大且易用性好。但是很多事情都是两面性的。就像现在习惯了vs的方便，当面临linux">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170621err.png?imageslim">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170621qsoap.png?imageslim">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170621qsoaph.png?imageslim">
+<meta property="og:updated_time" content="2018-03-25T07:16:33.149Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QT调用WebService的尝试和最终实现">
+<meta name="twitter:description" content="最近接触的QT项目与平台对接时需要用到WebService。博主从毕业起大部分工作都是在做桌面开发，所以对WebService只能说是一知半解。唯一的接触就是在.NET平台下编写，发布和调用WebService。这其中大部分工作微软都帮我们做好了，我们只需添加web引用，就像引用本地的库一样。不得不说VS确实强大且易用性好。但是很多事情都是两面性的。就像现在习惯了vs的方便，当面临linux">
+<meta name="twitter:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170621err.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">RickerYan&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        RickerYan&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        Reading, Coding, Thinking, Sharing
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="RickerYan" target="_blank" href="//yxqblog.tk">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/bayberryan">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-2017-06-21-cpp-call-webservice" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      QT调用WebService的尝试和最终实现
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/QT/">QT</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-06-21
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>   最近接触的QT项目与平台对接时需要用到WebService。博主从毕业起大部分工作都是在做桌面开发，所以对WebService只能说是一知半解。唯一的接触就是在.NET平台下编写，发布和调用WebService。这其中大部分工作微软都帮我们做好了，我们只需添加web引用，就像引用本地的库一样。不得不说VS确实强大且易用性好。但是很多事情都是两面性的。就像现在习惯了vs的方便，当面临linux C++的WebService调用时，博主直接就懵逼了。闲话少说，进入正题。</p>
+<h2 id="最初的尝试-qtsoap"><a href="#最初的尝试-qtsoap" class="headerlink" title="最初的尝试 qtsoap"></a>最初的尝试 qtsoap</h2><p>   由于是QT项目，一向懒惰的博主首先想到的是去找QT下的开源方案。几番查找，找到了这个4、5年前的开源项目<a href="https://github.com/qtproject/qt-solutions/tree/master/qtsoap" target="_blank" rel="noopener">qtsoap</a>。</p>
+<p>   通过官方示例和各种查阅文档。最终博主终于完成一个调用类，结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#ifndef WEBSERVICE_H</span><br><span class="line">#define WEBSERVICE_H</span><br><span class="line">#include &lt;qtsoap.h&gt;</span><br><span class="line">class WebService:public QObject</span><br><span class="line">&#123;</span><br><span class="line">        Q_OBJECT</span><br><span class="line">public:</span><br><span class="line">    /**********************************************</span><br><span class="line">     * description: Constructor</span><br><span class="line">     * parameter:   serviceUrl  webservice url</span><br><span class="line">     *              opration    request method</span><br><span class="line">     * ********************************************/</span><br><span class="line">    WebService(QString serviceUrl,QString operation);</span><br><span class="line">    ~WebService();</span><br><span class="line">    /*************************************</span><br><span class="line">     * description: Submit Request</span><br><span class="line">     * parameter:   argument for operation</span><br><span class="line">     * ***********************************/</span><br><span class="line">    void SubmitRequest(QString argument);</span><br><span class="line"></span><br><span class="line">private slots:</span><br><span class="line">    /***********************************************</span><br><span class="line">     * description: Response after operation</span><br><span class="line">     * parameter:   responseMessage</span><br><span class="line">     * *********************************************/</span><br><span class="line">    void getResponse(const QtSoapMessage &amp;response);</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    //服务地址</span><br><span class="line">    QString serviceUrl;</span><br><span class="line">    //执行的操作名称</span><br><span class="line">    QString operation;</span><br><span class="line">    QtSoapHttpTransport http;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>   只有两个函数：提交请求和获得响应，博主高高兴兴的编译 运行，</p>
+<p><img src="http://oqfoa6gjo.bkt.clouddn.com/20170621err.png?imageslim" alt=""></p>
+<p>   又是一脸懵，无论怎么检查，响应永远是Network transport error。没办法开始翻源码。当我看到要翻3000+行C++代码时，我的内心是拒绝的。</p>
+<p><img src="http://oqfoa6gjo.bkt.clouddn.com/20170621qsoap.png?imageslim" alt=""></p>
+<p>   无奈之下改翻头文件，XMLschema和namespace深深的吸引了我</p>
+<p><img src="http://oqfoa6gjo.bkt.clouddn.com/20170621qsoaph.png?imageslim" alt=""></p>
+<p>   这地址1998和1999，主观上以我对自己的了解，我是不会再改这货了。最后还是去QT开源社区的群咨询了一下下。许久只得到了以下回复其余都是乱扯：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qtsoap,我已经放弃了。</span><br></pre></td></tr></table></figure>
+<p>   最后还是默默的关掉了项目，寻求其他方案。</p>
+<h2 id="进一步了解WebService和QNetworkAccessManager"><a href="#进一步了解WebService和QNetworkAccessManager" class="headerlink" title="进一步了解WebService和QNetworkAccessManager"></a>进一步了解WebService和QNetworkAccessManager</h2><p>  无奈之下只能进一步开始了解WebService。什么是WebService呢？简单的说就是一种可以接受和相应网络上其他系统传递的请求，轻量的通讯技术，通过soap协议在web上提供服务。这里就不做详细解释了，想了解的同学可以自行搜索或参阅文末链接。基于对WebService的进一步了解，也就是说我们只需要通过网络向WebService发送soap消息请求就可以了。于是下一步就是解决QT下的网络通信了。于是主角QNetworkAccessManager登场。在了解了如何使用QNetworkAccessManager发送post和get请求后懒癌晚期的还是选择了寻找现成的方法。最后找到了这个：<a href="http://blog.csdn.net/weixin_38416696/article/details/70432504" target="_blank" rel="noopener">QNetworkAccessManager调用WebService</a><br>   因为目标WebService需要客户端传递xml格式的字符串，博主在以上方案上修改了部分代码又加了两个函数。源码奉上：</p>
+<p>   头文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/** *****************************************************</span><br><span class="line"> *                      QWebService</span><br><span class="line"> *</span><br><span class="line"> * 通过http post或get请求调用WebService</span><br><span class="line"> *</span><br><span class="line"> * ******************************************************/</span><br><span class="line">#ifndef QWEBSERVICE_H</span><br><span class="line">#define QWEBSERVICE_H</span><br><span class="line"></span><br><span class="line">#include &lt;QTimer&gt;</span><br><span class="line">#include &lt;QThread&gt;</span><br><span class="line">#include &lt;QNetworkAccessManager&gt;</span><br><span class="line">#include &lt;QNetworkRequest&gt;</span><br><span class="line">#include &lt;QNetworkReply&gt;</span><br><span class="line">/**</span><br><span class="line"> * xml字符串，转义符替换。</span><br><span class="line"> **/</span><br><span class="line">void Xml2Esc(QString &amp;xmlString);</span><br><span class="line">void Esc2Xml(QString &amp;escString);</span><br><span class="line">class NetDataListenerThread:public QThread</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line">public:</span><br><span class="line">    NetDataListenerThread(QNetworkAccessManager *manager,QNetworkReply * reply,int timeoutms,QObject *parent = 0);</span><br><span class="line">    ~NetDataListenerThread();</span><br><span class="line">    QByteArray getBa() const;</span><br><span class="line">    bool getIsWaitTimeOut() const;</span><br><span class="line">protected:</span><br><span class="line">    virtual void run();</span><br><span class="line">private:</span><br><span class="line">    bool waitForConnect();</span><br><span class="line">protected slots:</span><br><span class="line">    void slot_waitTimeout();</span><br><span class="line">signals:</span><br><span class="line">    void sig_waitTimeout();</span><br><span class="line">private:</span><br><span class="line">    QNetworkAccessManager *mManager;</span><br><span class="line">    int m_TimeOutms;</span><br><span class="line">    bool m_waitTimeOut;</span><br><span class="line">    bool m_isWaitTimeOut;</span><br><span class="line">    QNetworkReply * m_reply;</span><br><span class="line">&#125;;</span><br><span class="line">/**</span><br><span class="line"> * @brief The WebServiceHelp class webservice调用帮助类</span><br><span class="line"> * @author zp</span><br><span class="line"> */</span><br><span class="line">class   WebServiceHelp:public QObject</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line">private:</span><br><span class="line">    QString   postXml = &quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;utf-8\&quot;?&gt;&lt;soap:Envelope xmlns:xsi=\&quot;http://www.w3.org/2001/XMLSchema-instance\&quot; xmlns:xsd=\&quot;http://www.w3.org/2001/XMLSchema\&quot; xmlns:soap=\&quot;http://schemas.xmlsoap.org/soap/envelope/\&quot;&gt;&lt;soap:Body&gt;&lt;toTraditionalChinese xmlns=\&quot;http://webxml.com.cn/\&quot;&gt;&lt;sText&gt;ARGUMENT&lt;/sText&gt;&lt;/toTraditionalChinese&gt;&lt;/soap:Body&gt;&lt;/soap:Envelope&gt;&quot;;</span><br><span class="line">    class Dispose</span><br><span class="line">    &#123;</span><br><span class="line">    public:</span><br><span class="line">        ~Dispose();</span><br><span class="line">    &#125;;</span><br><span class="line">public:</span><br><span class="line">    static WebServiceHelp * getInstance();</span><br><span class="line">public:</span><br><span class="line">    /**</span><br><span class="line">     * @brief sendGetRequest 发送Get请求</span><br><span class="line">     * @param urlStr  url</span><br><span class="line">     * @param ba      返回数据</span><br><span class="line">     * @param timeOutms 超时时间</span><br><span class="line">     * @return  返回错误代码</span><br><span class="line">     */</span><br><span class="line">    QNetworkReply::NetworkError sendGetRequest(QString urlStr, QByteArray &amp; ba, int timeOutms=3000);</span><br><span class="line">    /**</span><br><span class="line">     * @brief sendPostRequest 发送post请求</span><br><span class="line">     * @param website  网址</span><br><span class="line">     * @param methodName 方法名称</span><br><span class="line">     * @param param 参数</span><br><span class="line">     * @param postBa    post数据</span><br><span class="line">     * @param code      返回代码</span><br><span class="line">     * @param message   返回信息</span><br><span class="line">     * @param data      返回数据</span><br><span class="line">     * @param timeOutms 超时时间</span><br><span class="line">     * @return 返回错误代码</span><br><span class="line">     */</span><br><span class="line">    QNetworkReply::NetworkError sendPostRequest(QString website,const QString argument, QByteArray&amp; retBa, int timeOutms=3000);</span><br><span class="line">protected slots:</span><br><span class="line">    void slot_error(QNetworkReply::NetworkError code);</span><br><span class="line">private:</span><br><span class="line">    static WebServiceHelp * serverHelp;</span><br><span class="line">    static WebServiceHelp::Dispose disp;</span><br><span class="line">    QNetworkAccessManager *manager;</span><br><span class="line">    QNetworkReply::NetworkError m_errCode;</span><br><span class="line">private:</span><br><span class="line">    WebServiceHelp(QObject *parent=0);</span><br><span class="line">    ~WebServiceHelp();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">#endif // QWEBSERVICE_H</span><br></pre></td></tr></table></figure>
+<p>   类文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br></pre></td><td class="code"><pre><span class="line">   #include &quot;qwebservice.h&quot;</span><br><span class="line">#include &lt;QEventLoop&gt;</span><br><span class="line"></span><br><span class="line">NetDataListenerThread::NetDataListenerThread(QNetworkAccessManager *manager, QNetworkReply *reply, int timeoutms, QObject *parent)</span><br><span class="line">    :QThread(parent),mManager(manager),m_TimeOutms(timeoutms),m_reply(reply)</span><br><span class="line">&#123;</span><br><span class="line">    m_waitTimeOut = false;</span><br><span class="line">    m_isWaitTimeOut = false;</span><br><span class="line">&#125;</span><br><span class="line">NetDataListenerThread::~NetDataListenerThread()</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br><span class="line">void NetDataListenerThread::run()</span><br><span class="line">&#123;</span><br><span class="line">    m_isWaitTimeOut = waitForConnect();</span><br><span class="line">&#125;</span><br><span class="line">bool NetDataListenerThread::waitForConnect()</span><br><span class="line">&#123;</span><br><span class="line">    QEventLoop eventLoop;</span><br><span class="line">    QTimer * timer = NULL;</span><br><span class="line">    m_waitTimeOut = false;</span><br><span class="line">    bool bWaitTimeOut = false;</span><br><span class="line">    if (m_TimeOutms &gt; 0)</span><br><span class="line">    &#123;</span><br><span class="line">        timer = new QTimer;</span><br><span class="line">        connect(timer, SIGNAL(timeout()), this, SLOT(slot_waitTimeout()));</span><br><span class="line">        timer-&gt;setSingleShot(true);</span><br><span class="line">        timer-&gt;start(m_TimeOutms);</span><br><span class="line">        connect(this, SIGNAL(sig_waitTimeout()), &amp;eventLoop, SLOT(quit()));</span><br><span class="line">    &#125;</span><br><span class="line">    connect(mManager, SIGNAL(finished(QNetworkReply *)), &amp;eventLoop, SLOT(quit()));</span><br><span class="line">    if (m_reply != NULL)</span><br><span class="line">    &#123;</span><br><span class="line">        connect(m_reply, SIGNAL(readyRead()), &amp;eventLoop, SLOT(quit()));</span><br><span class="line">    &#125;</span><br><span class="line">    eventLoop.exec();</span><br><span class="line">    if (timer != NULL)</span><br><span class="line">    &#123;</span><br><span class="line">        timer-&gt;stop();</span><br><span class="line">        delete timer;</span><br><span class="line">        timer = NULL;</span><br><span class="line">    &#125;</span><br><span class="line">    bWaitTimeOut = m_waitTimeOut;</span><br><span class="line">    m_waitTimeOut = false;</span><br><span class="line">    return !bWaitTimeOut;</span><br><span class="line">&#125;</span><br><span class="line">void NetDataListenerThread::slot_waitTimeout()</span><br><span class="line">&#123;</span><br><span class="line">    m_waitTimeOut = true;</span><br><span class="line">    emit sig_waitTimeout();</span><br><span class="line">&#125;</span><br><span class="line">bool NetDataListenerThread::getIsWaitTimeOut() const</span><br><span class="line">&#123;</span><br><span class="line">    return m_isWaitTimeOut;</span><br><span class="line">&#125;</span><br><span class="line">WebServiceHelp * WebServiceHelp::serverHelp = NULL;</span><br><span class="line">WebServiceHelp::Dispose WebServiceHelp::disp;</span><br><span class="line">WebServiceHelp::WebServiceHelp(QObject *parent):QObject(parent)</span><br><span class="line">&#123;</span><br><span class="line">    manager = new QNetworkAccessManager();</span><br><span class="line">    m_errCode= QNetworkReply::NoError;</span><br><span class="line">&#125;</span><br><span class="line">WebServiceHelp::~WebServiceHelp()</span><br><span class="line">&#123;</span><br><span class="line">    manager-&gt;deleteLater();</span><br><span class="line">&#125;</span><br><span class="line">WebServiceHelp *WebServiceHelp::getInstance()</span><br><span class="line">&#123;</span><br><span class="line">    if(serverHelp==NULL)</span><br><span class="line">    &#123;</span><br><span class="line">        serverHelp = new WebServiceHelp();</span><br><span class="line">    &#125;</span><br><span class="line">    return serverHelp;</span><br><span class="line">&#125;</span><br><span class="line">QNetworkReply::NetworkError WebServiceHelp::sendGetRequest(QString urlStr, QByteArray &amp; ba,int timeOutms)</span><br><span class="line">&#123;</span><br><span class="line">    QNetworkReply::NetworkError retError = QNetworkReply::NoError;</span><br><span class="line">    m_errCode= QNetworkReply::NoError;</span><br><span class="line">    QNetworkRequest request;</span><br><span class="line">    QUrl url(urlStr);</span><br><span class="line">    request.setUrl(url);</span><br><span class="line">    QNetworkReply *reply = manager-&gt;get(request);</span><br><span class="line">    connect(reply,static_cast&lt;void (QNetworkReply::*)(QNetworkReply::NetworkError)&gt;(&amp;QNetworkReply::error),this,&amp;WebServiceHelp::slot_error);</span><br><span class="line">    QEventLoop eventLoop;</span><br><span class="line">    NetDataListenerThread * thread = new NetDataListenerThread(manager,reply,timeOutms);</span><br><span class="line">    connect(thread, &amp;NetDataListenerThread::finished,&amp;eventLoop,&amp;QEventLoop::quit);</span><br><span class="line">    thread-&gt;start();</span><br><span class="line">    eventLoop.exec();</span><br><span class="line">    if(thread-&gt;getIsWaitTimeOut())</span><br><span class="line">    &#123;</span><br><span class="line">        ba = reply-&gt;readAll();</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        m_errCode=QNetworkReply::TimeoutError;</span><br><span class="line">    &#125;</span><br><span class="line">    thread-&gt;deleteLater();</span><br><span class="line">    delete reply;</span><br><span class="line">    delete thread;</span><br><span class="line">    thread = NULL;</span><br><span class="line">    retError = m_errCode;</span><br><span class="line">    m_errCode= QNetworkReply::NoError;</span><br><span class="line">    return retError;</span><br><span class="line">&#125;</span><br><span class="line">QNetworkReply::NetworkError WebServiceHelp:: sendPostRequest(QString website, const QString argument, QByteArray &amp;retBa, int timeOutms)</span><br><span class="line">&#123;</span><br><span class="line">    QString urlStr =website;</span><br><span class="line">    QByteArray postBa=postXml.replace(&quot;ARGUMENT&quot;,argument).toUtf8();</span><br><span class="line">    qDebug()&lt;&lt;postBa;</span><br><span class="line">    QNetworkReply::NetworkError retError = QNetworkReply::NoError;</span><br><span class="line">    m_errCode= QNetworkReply::NoError;</span><br><span class="line">    QNetworkRequest request;</span><br><span class="line">    QSslConfiguration config;</span><br><span class="line">    config.setPeerVerifyMode(QSslSocket::VerifyNone);</span><br><span class="line">    config.setProtocol(QSsl::TlsV1SslV3);</span><br><span class="line">    request.setSslConfiguration(config);</span><br><span class="line">    QUrl url(urlStr);</span><br><span class="line">    request.setUrl(url);</span><br><span class="line">    request.setHeader(QNetworkRequest::ContentTypeHeader,&quot;text/xml; charset=utf-8&quot;);</span><br><span class="line">    request.setHeader(QNetworkRequest::ContentLengthHeader,postBa.length());</span><br><span class="line">    QNetworkReply *reply = manager-&gt;post(request,postBa);</span><br><span class="line">    connect(reply,static_cast&lt;void (QNetworkReply::*)(QNetworkReply::NetworkError)&gt;(&amp;QNetworkReply::error),this,&amp;WebServiceHelp::slot_error);</span><br><span class="line">    QEventLoop eventLoop;</span><br><span class="line">    NetDataListenerThread * thread = new NetDataListenerThread(manager,reply,timeOutms);</span><br><span class="line">    connect(thread, &amp;NetDataListenerThread::finished,&amp;eventLoop,&amp;QEventLoop::quit);</span><br><span class="line">    thread-&gt;start();</span><br><span class="line">    eventLoop.exec();</span><br><span class="line">    if(thread-&gt;getIsWaitTimeOut())</span><br><span class="line">    &#123;</span><br><span class="line">        retBa = reply-&gt;readAll();</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        m_errCode=QNetworkReply::TimeoutError;</span><br><span class="line">    &#125;</span><br><span class="line">    thread-&gt;deleteLater();</span><br><span class="line">    delete reply;</span><br><span class="line">    delete thread;</span><br><span class="line">    thread = NULL;</span><br><span class="line">    retError = m_errCode;</span><br><span class="line">    m_errCode= QNetworkReply::NoError;</span><br><span class="line">    return retError;</span><br><span class="line">&#125;</span><br><span class="line">void WebServiceHelp::slot_error(QNetworkReply::NetworkError code)</span><br><span class="line">&#123;</span><br><span class="line">    m_errCode = code;</span><br><span class="line">&#125;</span><br><span class="line">WebServiceHelp::Dispose::~Dispose()</span><br><span class="line">&#123;</span><br><span class="line">    if(WebServiceHelp::serverHelp!=NULL)</span><br><span class="line">    &#123;</span><br><span class="line">        delete WebServiceHelp::serverHelp;</span><br><span class="line">        WebServiceHelp::serverHelp=NULL;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void Xml2Esc(QString &amp;xmlString)</span><br><span class="line">&#123;</span><br><span class="line">    xmlString.replace(&quot;&lt;&quot;,&quot;&amp;lt;&quot;);</span><br><span class="line">    xmlString.replace(&quot;&gt;&quot;,&quot;&amp;gt;&quot;);</span><br><span class="line">    xmlString.replace(&quot;&amp;&quot;,&quot;&amp;amp;&quot;);</span><br><span class="line">    xmlString.replace(&quot;&apos;&quot;,&quot;&amp;apos;&quot;);</span><br><span class="line">    xmlString.replace(&quot;\&quot;&quot;,&quot;&amp;quot;&quot;);</span><br><span class="line">&#125;</span><br><span class="line">void Esc2Xml(QString &amp;escString)</span><br><span class="line">&#123;</span><br><span class="line">    escString.replace(&quot;&amp;lt;&quot;,&quot;&lt;&quot;);</span><br><span class="line">    escString.replace(&quot;&amp;gt;&quot;,&quot;&gt;&quot;);</span><br><span class="line">    escString.replace(&quot;&amp;amp;&quot;,&quot;&amp;&quot;);</span><br><span class="line">    escString.replace(&quot;&amp;apos;&quot;,&quot;&apos;&quot;);</span><br><span class="line">    escString.replace(&quot;&amp;quot;&quot;,&quot;\&quot;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   这样我们只需在项目加入以上代码，直接调用函数发送请求就ok了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QNetworkReply::NetworkError ret=WebServiceHelp::getInstance()-&gt;sendPostRequest(url,argement,retba);</span><br></pre></td></tr></table></figure>
+<h2 id="最终的选择-gsoap"><a href="#最终的选择-gsoap" class="headerlink" title="最终的选择 gsoap"></a>最终的选择 gsoap</h2><p>   虽然博主已经通过发送post请求实现了WebService的调用，但开会时平台方还是建议用gsoap实现WebService服务或调用WebService。最终博主还是默默的将gsoap下载下来。默默的查了查C++的调用方法。然后默默的将项目替换成使用gsoap调用WebService。<br>   关于gsoap的C++使用方法博主会有单独的文章介绍。今天就先写到这里，出差在宾馆写这些已经很佩服我自己了。继续加油吧。。。</p>
+<h2 id="附链"><a href="#附链" class="headerlink" title="附链"></a>附链</h2><ul>
+<li><a href="https://github.com/qtproject/qt-solutions/tree/master/qtsoap" target="_blank" rel="noopener">qtsoap</a></li>
+<li><a href="http://www.cnblogs.com/Jessy/p/3528341.html" target="_blank" rel="noopener">WebService工作原理</a></li>
+<li><a href="http://blog.csdn.net/weixin_38416696/article/details/70432504" target="_blank" rel="noopener">QNetworkAccessManager</a></li>
+<li><a href="http://www.cs.fsu.edu/~engelen/soap.html" target="_blank" rel="noopener">gsoap</a></li>
+</ul>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2018年03月25日 15:16</p>
+        <p>原始链接： <a class="post-url" href="/2017/06/21/2017-06-21-cpp-call-webservice/" title="QT调用WebService的尝试和最终实现">http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/</a></p>
+        <footer>
+            <a href="http://yxqblog.tk">
+                <img src="/images/logo.png" alt="RickerYan">
+                RickerYan
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        打赏作者~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/&title=《QT调用WebService的尝试和最终实现》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/20170621qsoap.png?imageslim" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/&title=《QT调用WebService的尝试和最终实现》 — RickerYan&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《QT调用WebService的尝试和最终实现》 — RickerYan&url=http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/&via=http://yxqblog.tk" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2017/06/21/2017-06-21-cpp-call-webservice/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/QT/" class="color3">QT</a>
+      
+    <a href="/tags/C++/" class="color4">C++</a>
+      
+    <a href="/tags/qtsoap/" class="color2">qtsoap</a>
+      
+    <a href="/tags/gsoap/" class="color1">gsoap</a>
+      
+    <a href="/tags/WebService/" class="color1">WebService</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#最初的尝试-qtsoap"><span class="post-toc-text">最初的尝试 qtsoap</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#进一步了解WebService和QNetworkAccessManager"><span class="post-toc-text">进一步了解WebService和QNetworkAccessManager</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#最终的选择-gsoap"><span class="post-toc-text">最终的选择 gsoap</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#附链"><span class="post-toc-text">附链</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2017/05/26/2017-05-26-use-mvvm-in-ArcgisRuntime-app/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">使用MVVM模式开发Arcgis Runtime 程序</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+          <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2135289"></script>
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2018 <a href="https://github.com/bayberryan"> RickerYan</a><br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yxqblog.tk",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/ArcMap/">ArcMap</a><a class="category-link" href="/categories/ArcgisRuntime/">ArcgisRuntime</a><a class="category-link" href="/categories/QT/">QT</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/ArcMap/" style="font-size: 20px;">ArcMap</a> <a href="/tags/ArcgisRuntime/" style="font-size: 10px;">ArcgisRuntime</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Gp/" style="font-size: 20px;">Gp</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Polygon/" style="font-size: 20px;">Polygon</a> <a href="/tags/QT/" style="font-size: 10px;">QT</a> <a href="/tags/WebService/" style="font-size: 10px;">WebService</a> <a href="/tags/gsoap/" style="font-size: 10px;">gsoap</a> <a href="/tags/qtsoap/" style="font-size: 10px;">qtsoap</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/ArcMap/" style="font-size: 20px;">ArcMap</a> <a href="/tags/ArcgisRuntime/" style="font-size: 10px;">ArcgisRuntime</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Gp/" style="font-size: 20px;">Gp</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Polygon/" style="font-size: 20px;">Polygon</a> <a href="/tags/QT/" style="font-size: 10px;">QT</a> <a href="/tags/WebService/" style="font-size: 10px;">WebService</a> <a href="/tags/gsoap/" style="font-size: 10px;">gsoap</a> <a href="/tags/qtsoap/" style="font-size: 10px;">qtsoap</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
