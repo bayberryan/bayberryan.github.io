@@ -3,24 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>ArcMap面要素处理之消除面部分(EliminatePolygonPart) | RickerYan</title>
+  <title>使用shp2pgsql导入EsriShapefile | RickerYan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="RickerYan,RickerYan's Blog" />
   
-  <meta name="description" content="摘要创建一个新的输出要素类，包含从输入面上删除某些指定大小的部分或孔洞所得的要素。 插图 用法 由于可将面洞看作面的一部分，因此可使用此工具删除或填充面洞。如果洞面积小于指定尺寸，则该洞将被消除，并且在输出中填补该空间。删除的洞中的所有部分也都将在输出中被消除。 部分的大小可以指定为面积、百分比或两者的结合。使用条件参数可确定指定部分大小的方式。条件参数 AREA_AND_PERCENT 和 AR">
-<meta name="keywords" content="ArcMap,Polygon,Gp">
+  <meta name="description" content="摘要shp2pgsql 是Postgresql提供的入库工具。能够将 ESRI Shapefile转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过调用shp2pgsql开发易用的入库工具。 插图 用法shp2pgsql包含多个命令参数，用于指定导入配置。  以下四个为互斥选项     有两种">
+<meta name="keywords" content="Shp,Postgresql,Postgis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ArcMap面要素处理之消除面部分(EliminatePolygonPart)">
-<meta property="og:url" content="http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/index.html">
+<meta property="og:title" content="使用shp2pgsql导入EsriShapefile">
+<meta property="og:url" content="http://yxqblog.tk/2018/03/26/shp2pgsql/index.html">
 <meta property="og:site_name" content="RickerYan">
-<meta property="og:description" content="摘要创建一个新的输出要素类，包含从输入面上删除某些指定大小的部分或孔洞所得的要素。 插图 用法 由于可将面洞看作面的一部分，因此可使用此工具删除或填充面洞。如果洞面积小于指定尺寸，则该洞将被消除，并且在输出中填补该空间。删除的洞中的所有部分也都将在输出中被消除。 部分的大小可以指定为面积、百分比或两者的结合。使用条件参数可确定指定部分大小的方式。条件参数 AREA_AND_PERCENT 和 AR">
-<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/EliminatePolygonPart.png">
-<meta property="og:updated_time" content="2018-03-25T07:16:47.434Z">
+<meta property="og:description" content="摘要shp2pgsql 是Postgresql提供的入库工具。能够将 ESRI Shapefile转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过调用shp2pgsql开发易用的入库工具。 插图 用法shp2pgsql包含多个命令参数，用于指定导入配置。  以下四个为互斥选项     有两种">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170615.jpg?imageslim">
+<meta property="og:updated_time" content="2018-03-26T10:01:43.706Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ArcMap面要素处理之消除面部分(EliminatePolygonPart)">
-<meta name="twitter:description" content="摘要创建一个新的输出要素类，包含从输入面上删除某些指定大小的部分或孔洞所得的要素。 插图 用法 由于可将面洞看作面的一部分，因此可使用此工具删除或填充面洞。如果洞面积小于指定尺寸，则该洞将被消除，并且在输出中填补该空间。删除的洞中的所有部分也都将在输出中被消除。 部分的大小可以指定为面积、百分比或两者的结合。使用条件参数可确定指定部分大小的方式。条件参数 AREA_AND_PERCENT 和 AR">
-<meta name="twitter:image" content="http://oqfoa6gjo.bkt.clouddn.com/EliminatePolygonPart.png">
+<meta name="twitter:title" content="使用shp2pgsql导入EsriShapefile">
+<meta name="twitter:description" content="摘要shp2pgsql 是Postgresql提供的入库工具。能够将 ESRI Shapefile转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过调用shp2pgsql开发易用的入库工具。 插图 用法shp2pgsql包含多个命令参数，用于指定导入配置。  以下四个为互斥选项     有两种">
+<meta name="twitter:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170615.jpg?imageslim">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -108,14 +108,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-ArcMap-Ploygon-EliminatePart" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-shp2pgsql" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      ArcMap面要素处理之消除面部分(EliminatePolygonPart)
+      使用shp2pgsql导入EsriShapefile
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -123,12 +123,12 @@
               <li>
                   <i class="fa fa-book"></i>
                   
-                      <a href="/categories/ArcMap/">ArcMap</a>
+                      <a href="/categories/Postgresql/">Postgresql</a>
                   
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2017-04-20
+          <i class="fa fa-calendar"></i>  2018-03-26
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -144,16 +144,27 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>创建一个新的输出要素类，包含从输入面上删除某些指定大小的部分或孔洞所得的要素。</p>
-<h2 id="插图"><a href="#插图" class="headerlink" title="插图"></a>插图</h2><p><img src="http://oqfoa6gjo.bkt.clouddn.com/EliminatePolygonPart.png" alt=""></p>
-<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ul>
-<li>由于可将面洞看作面的一部分，因此可使用此工具删除或填充面洞。如果洞面积小于指定尺寸，则该洞将被消除，并且在输出中填补该空间。删除的洞中的所有部分也都将在输出中被消除。</li>
-<li>部分的大小可以指定为面积、百分比或两者的结合。使用条件参数可确定指定部分大小的方式。条件参数 AREA_AND_PERCENT 和 AREA_OR_PERCENT 选项可使用面积和百分比条件来消除部分。</li>
-<li>面部分百分比是以要素总外部面积（包括所有洞的面积）的百分比进行计算的。例如，如果某个具有洞的面的面积为 75 平方米，洞的覆盖面积为 25 平方米，则总的面外部面积为 100 平方米。要消除此洞，需要指定大于 25 平方米的面积，或指定大于 25% 的百分比。如果输入为多部分面，则要素的外部面积为所有面部分所覆盖的面积的总和。</li>
-<li>对于多部分面，会将各部分的面积与指定面积进行对比。如果某个面部分小于指定的大小，则该部分将在输出中被消除。</li>
-<li>如果面要素的所有部分都小于指定的大小，则会在输出中保留最大的部分，而将其他所有部分消除。</li>
+            <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>shp2pgsql 是Postgresql提供的入库工具。能够将 ESRI Shapefile转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过调用shp2pgsql开发易用的入库工具。</p>
+<h2 id="插图"><a href="#插图" class="headerlink" title="插图"></a>插图</h2><p><img src="http://oqfoa6gjo.bkt.clouddn.com/20170615.jpg?imageslim" alt=""></p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>shp2pgsql包含多个命令参数，用于指定导入配置。</p>
+<ul>
+<li>以下四个为互斥选项</li>
 </ul>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EliminatePolygonPart_management (in_features, out_feature_class, &#123;condition&#125;, &#123;part_area&#125;, &#123;part_area_percent&#125;, &#123;part_option&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+</blockquote>
+<ul>
+<li><p>有两种平滑方法可供选择：</p>
+<ul>
+<li>PAEK（指数核的多项式近似）方法可根据平滑容差对面进行平滑处理。每个面经过平滑处理后，其折点都可能比之前多。平滑容差参数可控制计算新折点时用到的“移动”路径的长度。长度越短，保留的细节越多，处理时间也越长。</li>
+<li>贝塞尔插值方法（Python 中为 BEZIER_INTERPOLATION）对面进行平滑处理时无需使用容差，而是通过创建贝塞尔曲线来匹配输入线。如果输出为 shapefile，则将创建近似的贝塞尔曲线，因为真正的贝塞尔曲线无法存储在 shapefile 中。</li>
+</ul>
+</li>
+<li><p>平滑处理可能带来拓扑错误，如面轮廓的交叉。使用处理拓扑错误参数中的标记错误选项（Python 中为 FLAG_ERRORS）可识别这些错误。将添加两个字段 InPoly_FID 和 SmoPlyFlag 以包含输入要素 ID 和拓扑错误。SmoPlyFlag 字段中的值为 1 表明存在拓扑错误；0（零）表明不存在错误。InPoly_FID 字段将输出面连接到其输入面。标记错误选项不能在编辑会话中使用。</p>
+</li>
+<li><p>在平滑处理的过程中，可能创建无效（自相交）的几何，并将对无效的几何进行修复，但不会将其改进。例如，如果一个面自交叉，则这个面将成为多部分面，但显示效果依然是自交叉。</p>
+</li>
+</ul>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SmoothPolygon_cartography (in_features, out_feature_class, algorithm, tolerance, &#123;endpoint_option&#125;, &#123;error_option&#125;)</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
@@ -165,40 +176,40 @@
 <tbody>
 <tr>
 <td>in_features</td>
-<td>其要素将被复制到输出要素类（消除某些部分或洞）的输入要素类或图层。</td>
+<td>要平滑处理的面要素。</td>
 <td>Feature Layer</td>
 </tr>
 <tr>
 <td>out_feature_class</td>
-<td>包含其余部分的输出面要素类。</td>
+<td>要创建的输出面要素类。</td>
 <td>Feature Class</td>
 </tr>
 <tr>
-<td>condition(可选)</td>
-<td>指定要消除的部分的确定方式。AREA —面积小于指定值的部分将被消除。PERCENT —总外部面积百分比小于指定值的部分将被消除。AREA_AND_PERCENT —面积和百分比均小于指定值的部分将被消除。只有同时满足面积和百分比两个条件的面部分才会被删除。AREA_OR_PERCENT —面积或百分比小于指定值的部分将被消除。如果面部分满足面积或百分比条件之一，该面将被删除。</td>
+<td>algorithm</td>
+<td>指定平滑算法。PAEK —Polynomial Approximation with Exponential Kernel（指数核的多项式近似）的首字母缩略词。该方法可以计算不经过输入面折点的平滑面。这是默认设置。BEZIER_INTERPOLATION —拟合折点间的贝塞尔曲线。生成的面将经过输入面的折点。该算法不需要容差。在 shapefile 输出中，将创建近似的贝塞尔曲线。</td>
 <td>String</td>
 </tr>
 <tr>
-<td>part_area(可选)</td>
-<td>消除小于此面积的部分。</td>
-<td>Areal Unit</td>
+<td>tolerance</td>
+<td>设置 PAEK 算法使用的容差。必须指定一个容差，且值必须大于零。可以指定首选单位；默认为要素单位。使用 BEZIER_INTERPOLATION 平滑算法时，必须输入 0 作为占位符。</td>
+<td>Linear Unit</td>
 </tr>
 <tr>
-<td>part_area_percent(可选)</td>
-<td>消除小于此要素总外部面积百分比的部分。</td>
-<td>Double</td>
-</tr>
-<tr>
-<td>part_option(可选)</td>
-<td>确定可消除的部分。CONTAINED_ONLY —仅消除完全包含于其他部分的部分。这是默认设置。ANY —可消除任意部分。</td>
+<td>endpoint_option(可选)</td>
+<td>指定是否保留孤立面环的端点。该选项仅适用于 PAEK 算法。FIXED_ENDPOINT —保留孤立面环的端点。这是默认设置。NO_FIXED —通过孤立面环的端点进行平滑处理。</td>
 <td>Boolean</td>
+</tr>
+<tr>
+<td>error_option(可选)</td>
+<td>指定如何处理拓扑错误（可能是在该过程中引发的，如线的交叉或重叠）。NO_CHECK —指定不检查拓扑错误。这是默认设置。FLAG_ERRORS —指定标记拓扑错误（如果发现拓扑错误）。</td>
+<td>String</td>
 </tr>
 </tbody>
 </table>
-<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><h3 id="消除面部分示例（Python-窗口）"><a href="#消除面部分示例（Python-窗口）" class="headerlink" title="消除面部分示例（Python 窗口）"></a>消除面部分示例（Python 窗口）</h3><p>以下 Python 窗口脚本演示了如何在即时模式下使用“消除”工具。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import arcpy from arcpy import env env.workspace = &quot;C:/data&quot; arcpy.EliminatePolygonPart_management(&quot;buildings.shp&quot;, &quot;output.gdb/remaining_buildings&quot;, &quot;AREA&quot;, 10)</span><br></pre></td></tr></table></figure>
-<h3 id="消除面部分示例-2（独立脚本）"><a href="#消除面部分示例-2（独立脚本）" class="headerlink" title="消除面部分示例 2（独立脚本）"></a>消除面部分示例 2（独立脚本）</h3><p>以下独立 Python 脚本演示了如何使用“消除面部分”工具。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Name: EliminatePolygonPart_Example2.py </span><br><span class="line"># Description: Eliminate small islands before simplifying and smoothing lake boundaries </span><br><span class="line"># Author: ESRI   </span><br><span class="line"># Import system modules import arcpy from arcpy import env   </span><br><span class="line"># Set environment settings env.workspace = &quot;C:/data/Portland.gdb/Hydrography&quot;   </span><br><span class="line"># Set local variables inLakeFeatures = &quot;lakes&quot; eliminatedFeatures = &quot;lakes_eliminated&quot; simplifiedFeatures = &quot;lakes_simplified&quot; smoothedFeatures = &quot;lakes_smoothed&quot; </span><br><span class="line"># Eliminate small islands in lake polygons. arcpy.EliminatePolygonPart_management(inLakeFeatures, eliminatedFeatures, &quot;AREA&quot;, 100, &quot;&quot;, &quot;CONTAINED_ONLY&quot;)   </span><br><span class="line"># Simplify lake polygons. arcpy.SimplifyPolygon_cartography(eliminatedFeatures, simplifiedFeatures, &quot;POINT_REMOVE&quot;, 50, 200, &quot;RESOLVE_ERRORS&quot;, &quot;KEEP_COLLAPSED_POINTS&quot;)   </span><br><span class="line"># Smooth lake polygons. arcpy.SmoothPolygon_cartography(simplifiedFeatures, smoothedFeatures, &quot;BEZIER_INTERPOLATION&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><h3 id="平滑面示例（Python-窗口）"><a href="#平滑面示例（Python-窗口）" class="headerlink" title="平滑面示例（Python 窗口）"></a>平滑面示例（Python 窗口）</h3><p>以下 Python 窗口脚本演示了如何在即时模式下使用“平滑面”工具。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import arcpy</span><br><span class="line">import arcpy.cartography as CA</span><br><span class="line">arcpy.env.workspace = &quot;C:/data&quot;</span><br><span class="line">CA.SmoothPolygon(&quot;soils.shp&quot;, &quot;C:/output/output.gdb/smoothed_soils&quot;, &quot;PAEK&quot;, 100)</span><br></pre></td></tr></table></figure>
+<h3 id="平滑面示例-2（独立脚本）"><a href="#平滑面示例-2（独立脚本）" class="headerlink" title="平滑面示例 2（独立脚本）"></a>平滑面示例 2（独立脚本）</h3><p>以下独立 Python 脚本演示了如何使用“简化面”工具。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># Name: SmoothPolygon_Example2.py</span><br><span class="line"># Description: Eliminate small islands before simplifying and smoothing lake boundaries</span><br><span class="line"> </span><br><span class="line"># Import system modules</span><br><span class="line">import arcpy</span><br><span class="line">import arcpy.cartography as CA</span><br><span class="line">import arcpy.management as DM</span><br><span class="line"> </span><br><span class="line"># Set environment settings</span><br><span class="line">arcpy.env.workspace = &quot;C:/data/Portland.gdb/Hydrography&quot;</span><br><span class="line"> </span><br><span class="line"># Set local variables</span><br><span class="line">inLakeFeatures = &quot;lakes&quot;</span><br><span class="line">eliminatedFeatures = &quot;C:/data/PortlandOutput.gdb/lakes_eliminated&quot;</span><br><span class="line">simplifiedFeatures = &quot;C:/data/PortlandOutput.gdb/lakes_simplified&quot;</span><br><span class="line">smoothedFeatures = &quot;C:/data/PortlandOutput.gdb/lakes_smoothed&quot;</span><br><span class="line"># Eliminate small islands in lake polygons.</span><br><span class="line">DM.EliminatePolygonPart(inLakeFeatures, eliminatedFeatures, 100, &quot;OR&quot;, 0, &quot;CONTAINED_ONLY&quot;)</span><br><span class="line"> </span><br><span class="line"># Simplify lake polygons.</span><br><span class="line">CA.SimplifyPolygon(eliminatedFeatures, simplifiedFeatures, &quot;POINT_REMOVE&quot;, 50, 200, &quot;RESOLVE_ERRORS&quot;, &quot;KEEP_COLLAPSED_POINTS&quot;, &quot;CHECK&quot;)</span><br><span class="line"> </span><br><span class="line"># Smooth lake polygons.</span><br><span class="line">CA.SmoothPolygon(simplifiedFeatures, smoothedFeatures, &quot;PAEK&quot;, 100, &quot;&quot;, &quot;FLAG_ERRORS&quot;)</span><br></pre></td></tr></table></figure>
 <h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>要了解更多关于ArcMap的知识请参阅以下链接：</p>
 <ul>
 <li><a href="http://desktop.arcgis.com/zh-cn/arcmap" target="_blank" rel="noopener">desktop.arcgis.com</a></li>
@@ -206,8 +217,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2018年03月25日 15:16</p>
-        <p>原始链接： <a class="post-url" href="/2017/04/20/ArcMap-Ploygon-EliminatePart/" title="ArcMap面要素处理之消除面部分(EliminatePolygonPart)">http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/</a></p>
+        <p>最后更新： 2018年03月26日 18:01</p>
+        <p>原始链接： <a class="post-url" href="/2018/03/26/shp2pgsql/" title="使用shp2pgsql导入EsriShapefile">http://yxqblog.tk/2018/03/26/shp2pgsql/</a></p>
         <footer>
             <a href="http://yxqblog.tk">
                 <img src="/images/logo.png" alt="RickerYan">
@@ -264,7 +275,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/&title=《ArcMap面要素处理之消除面部分(EliminatePolygonPart)》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/EliminatePolygonPart.png?imageslim" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2018/03/26/shp2pgsql/&title=《使用shp2pgsql导入EsriShapefile》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/20170615.jpg?imageslim" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -274,22 +285,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/&title=《ArcMap面要素处理之消除面部分(EliminatePolygonPart)》 — RickerYan&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2018/03/26/shp2pgsql/&title=《使用shp2pgsql导入EsriShapefile》 — RickerYan&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2018/03/26/shp2pgsql/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ArcMap面要素处理之消除面部分(EliminatePolygonPart)》 — RickerYan&url=http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/&via=http://yxqblog.tk" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用shp2pgsql导入EsriShapefile》 — RickerYan&url=http://yxqblog.tk/2018/03/26/shp2pgsql/&via=http://yxqblog.tk" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2018/03/26/shp2pgsql/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -299,7 +310,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2017/04/20/ArcMap-Ploygon-EliminatePart/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2018/03/26/shp2pgsql/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -311,11 +322,11 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/ArcMap/" class="color2">ArcMap</a>
+    <a href="/tags/Shp/" class="color4">Shp</a>
       
-    <a href="/tags/Polygon/" class="color3">Polygon</a>
+    <a href="/tags/Postgresql/" class="color1">Postgresql</a>
       
-    <a href="/tags/Gp/" class="color3">Gp</a>
+    <a href="/tags/Postgis/" class="color3">Postgis</a>
       
   </li>
 
@@ -328,26 +339,16 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#摘要"><span class="post-toc-text">摘要</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#插图"><span class="post-toc-text">插图</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#用法"><span class="post-toc-text">用法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#语法"><span class="post-toc-text">语法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代码实例"><span class="post-toc-text">代码实例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消除面部分示例（Python-窗口）"><span class="post-toc-text">消除面部分示例（Python 窗口）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消除面部分示例-2（独立脚本）"><span class="post-toc-text">消除面部分示例 2（独立脚本）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解更多"><span class="post-toc-text">了解更多</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#摘要"><span class="post-toc-text">摘要</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#插图"><span class="post-toc-text">插图</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#用法"><span class="post-toc-text">用法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#语法"><span class="post-toc-text">语法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代码实例"><span class="post-toc-text">代码实例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#平滑面示例（Python-窗口）"><span class="post-toc-text">平滑面示例（Python 窗口）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#平滑面示例-2（独立脚本）"><span class="post-toc-text">平滑面示例 2（独立脚本）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解更多"><span class="post-toc-text">了解更多</span></a></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-    <a href="/2017/05/15/ArcMap-Ploygon-Simplify/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          ArcMap面要素处理之简化面(Simplify Polygon)
-        
-      </span>
-    </a>
   
-  
-    <a href="/2017/03/24/ArcMap-Ploygon-Eliminate/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">ArcMap面要素处理之消除(Eliminate)</span>
+    <a href="/2018/03/25/book-hxmj/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">书籍推荐-《花香满径》（爱尔兰）巴克莱</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
