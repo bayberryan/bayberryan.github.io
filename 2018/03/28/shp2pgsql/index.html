@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="RickerYan">
 <meta property="og:description" content="摘要翻译至PostGis 2.4.4 Dev Manual 4.4.2 有删减。英文水平有限，错漏之处敬请告知。 shp2pgsql 是PostgreSQL提供的入库工具。能够将 ESRI Shape file转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过熟悉shp2pgsql然后开发易用">
 <meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20180326-1.jpg?imageslim">
-<meta property="og:updated_time" content="2018-03-28T13:28:29.954Z">
+<meta property="og:updated_time" content="2018-03-28T13:35:45.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shp2pgsql工具详解">
 <meta name="twitter:description" content="摘要翻译至PostGis 2.4.4 Dev Manual 4.4.2 有删减。英文水平有限，错漏之处敬请告知。 shp2pgsql 是PostgreSQL提供的入库工具。能够将 ESRI Shape file转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过熟悉shp2pgsql然后开发易用">
@@ -231,14 +231,14 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># shp2pgsql -c -D -s 4269 -i -I shaperoads.shp myschema.roadstable &gt; roads.sql</span><br><span class="line"># psql -d roadsdb -f roads.sql</span><br></pre></td></tr></table></figure>
 <p>使用UNIX管道可以在 一个命令中完成矢量数据转换和入库：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># shp2pgsql shaperoads.shp myschema.roadstable | psql -d roadsdb</span><br></pre></td></tr></table></figure>
-<h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>了解更多关于PostGIS的知识请参阅以下链接：</p>
+<h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>了解更多关于PostGIS的内容请参阅以下链接：</p>
 <ul>
 <li><a href="http://postgis.net/docs/" target="_blank" rel="noopener">PostGIS 2.4.4 Dev Manual</a></li>
 </ul>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2018年03月28日 21:28</p>
+        <p>最后更新： 2018年03月28日 21:35</p>
         <p>原始链接： <a class="post-url" href="/2018/03/28/shp2pgsql/" title="shp2pgsql工具详解">http://yxqblog.tk/2018/03/28/shp2pgsql/</a></p>
         <footer>
             <a href="http://yxqblog.tk">
