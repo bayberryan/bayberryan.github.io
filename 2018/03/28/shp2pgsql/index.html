@@ -3,21 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>about | RickerYan</title>
+  <title>shp2pgsql工具详解 | RickerYan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="RickerYan,RickerYan's Blog" />
   
-  <meta name="description" content="关于本站本站采用hexo搭建，托管于github。缘起：   相信每个有想法的码农都希望有一个自己的网站。 搬砖搬多了，人越来越木讷、话不会说、文章不会写。希望通过博客写写字锻炼锻炼。 记录生活和技术上踩过的坑及自己的感悟，自省,分享。   关于我多年从事GIS、RS、GNSS桌面端和服务端开发，主要开发语言C# 、IDL、C++。入坑较早，辗转接触使用过Fortran、C等古老语种，使用过Jav">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://yxqblog.tk/about/index.html">
+  <meta name="description" content="摘要翻译至PostGis 2.4.4 Dev Manual 4.4.2 有删减。英文水平有限，错漏之处敬请告知。 shp2pgsql 是PostgreSQL提供的入库工具。能够将 ESRI Shape file转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过熟悉shp2pgsql然后开发易用">
+<meta name="keywords" content="Shp,PostgreSQL,PostGIS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shp2pgsql工具详解">
+<meta property="og:url" content="http://yxqblog.tk/2018/03/28/shp2pgsql/index.html">
 <meta property="og:site_name" content="RickerYan">
-<meta property="og:description" content="关于本站本站采用hexo搭建，托管于github。缘起：   相信每个有想法的码农都希望有一个自己的网站。 搬砖搬多了，人越来越木讷、话不会说、文章不会写。希望通过博客写写字锻炼锻炼。 记录生活和技术上踩过的坑及自己的感悟，自省,分享。   关于我多年从事GIS、RS、GNSS桌面端和服务端开发，主要开发语言C# 、IDL、C++。入坑较早，辗转接触使用过Fortran、C等古老语种，使用过Jav">
-<meta property="og:updated_time" content="2018-03-26T09:36:11.584Z">
+<meta property="og:description" content="摘要翻译至PostGis 2.4.4 Dev Manual 4.4.2 有删减。英文水平有限，错漏之处敬请告知。 shp2pgsql 是PostgreSQL提供的入库工具。能够将 ESRI Shape file转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过熟悉shp2pgsql然后开发易用">
+<meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20180326-1.jpg?imageslim">
+<meta property="og:updated_time" content="2018-03-28T13:28:29.954Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="关于本站本站采用hexo搭建，托管于github。缘起：   相信每个有想法的码农都希望有一个自己的网站。 搬砖搬多了，人越来越木讷、话不会说、文章不会写。希望通过博客写写字锻炼锻炼。 记录生活和技术上踩过的坑及自己的感悟，自省,分享。   关于我多年从事GIS、RS、GNSS桌面端和服务端开发，主要开发语言C# 、IDL、C++。入坑较早，辗转接触使用过Fortran、C等古老语种，使用过Jav">
+<meta name="twitter:title" content="shp2pgsql工具详解">
+<meta name="twitter:description" content="摘要翻译至PostGis 2.4.4 Dev Manual 4.4.2 有删减。英文水平有限，错漏之处敬请告知。 shp2pgsql 是PostgreSQL提供的入库工具。能够将 ESRI Shape file转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过熟悉shp2pgsql然后开发易用">
+<meta name="twitter:image" content="http://oqfoa6gjo.bkt.clouddn.com/20180326-1.jpg?imageslim">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -105,20 +108,27 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-shp2pgsql" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      about
+      shp2pgsql工具详解
     </h1>
     <div class="post-title-bar">
       <ul>
           
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Postgresql/">Postgresql</a>
+                  
+              </li>
+          
         <li>
-          <i class="fa fa-calendar"></i>  2017-03-25
+          <i class="fa fa-calendar"></i>  2018-03-28
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -131,48 +141,105 @@
           
       </header>
     
-    <div class="article-entry " itemprop="articleBody">
+    <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="关于本站"><a href="#关于本站" class="headerlink" title="关于本站"></a>关于本站</h3><p>本站采用hexo搭建，托管于github。<br>缘起：</p>
+            <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p><a href="http://postgis.net/docs/using_postgis_dbmanagement.html#shp2pgsql_usage" target="_blank" rel="noopener">翻译至PostGis 2.4.4 Dev Manual 4.4.2 有删减。英文水平有限，错漏之处敬请告知。</a></p>
+<p>shp2pgsql 是PostgreSQL提供的入库工具。能够将 ESRI Shape file转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过熟悉shp2pgsql然后开发易用的shape file入库工具。</p>
+<h2 id="shp2pgsql-gui"><a href="#shp2pgsql-gui" class="headerlink" title="shp2pgsql-gui"></a>shp2pgsql-gui</h2><p><img src="http://oqfoa6gjo.bkt.clouddn.com/20180326-1.jpg?imageslim" alt=""></p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>shp2pgsql包含多个命令参数，用于指定导入配置。参数列表如下：</p>
+<p>以下四个为互斥选项</p>
 <blockquote>
 <ul>
-<li>相信每个有想法的码农都希望有一个自己的网站。</li>
-<li>搬砖搬多了，人越来越木讷、话不会说、文章不会写。希望通过博客写写字锻炼锻炼。</li>
-<li>记录生活和技术上踩过的坑及自己的感悟，自省,分享。</li>
+<li><p>-c</p>
+<p>创建新的表结构并填充数据。默认选项。</p>
+</li>
+<li><p>-a</p>
+<p>将shp文件中的数据导入已存在的数据表中。使用此选项文件必须具有相同的字段和数据类型。</p>
+</li>
+<li><p>-d</p>
+<p>创建新表和导入数据前，删除数据库中已存在的表。</p>
+</li>
+<li><p>-p</p>
+<p>只生成创建表结构的SQL代码，不导入任何数据。当需要分离表结构创建和数据导入时，使用此项。</p>
+</li>
 </ul>
 </blockquote>
-<h3 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h3><p>多年从事GIS、RS、GNSS桌面端和服务端开发，主要开发语言<code>C# 、IDL、C++</code>。入坑较早，辗转接触使用过<code>Fortran、C</code>等古老语种，使用过<code>JavaScript、Python</code>等脚本语言。考虑过转投JAVA阵营，无奈接触项目多为桌面系统。最终还是留在了微软系继续深耕。<br>多年踩坑，从数据库到服务端到桌面端和web前端有了自己的理解。主要技术栈：</p>
+<p>其他参数</p>
 <blockquote>
 <ul>
-<li>数据库：<code>Oracle、Postgresql、Postgis、SQLite</code></li>
-<li>服务端：<code>Asp.Net、Asp.Net MVC、Asp.Net WebApi</code></li>
-<li>桌面端：<code>WinForm、WPF、QT</code></li>
-<li>前端：<code>Leaflet、Openlayer</code></li>
+<li><p>-?</p>
+<p>查看帮助信息</p>
+</li>
+<li><p>-D</p>
+<p>使用PostgreSQL “dump”格式输出数据。可以和-a、-c及-d结合使用。“dump”加载速度比“insert”快很多，可以用于大数据量的数据集处理。</p>
+</li>
+<li><p>-s &lt;[&lt;FROM_SRID&gt;]<srid></srid></p>
+<p>以指定的SRID创建表结构并填充数据。可以为给定的FROM_SRID指定任意的shp文件，此时空间数据会被重投影到目标SRID。FROM_SRID不能用-D来指定。</p>
+</li>
+<li><p>-k</p>
+<p>保持标识符大小写（列，模式和属性 ）。shp中的属性字段都是大写。</p>
+</li>
+<li><p>-i</p>
+<p>强制所有整型数据为标准32位整数，即使DBF头文件标名也不创建64位的bigints</p>
+</li>
+<li><p>-I</p>
+<p>在空间数据列上创建GiST空间索引。</p>
+</li>
+<li><p>-m</p>
+<p>指定一个文件包含长列名与DBF列名（译者注：DBF文件支持的列名长度不大于10）的映射.文件内容是一个或多个两行名称，以空格分隔，前后无空格。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;  COLUMNNAME DBFFIELD1</span><br><span class="line">&gt;  AVERYLONGCOLUMNNAME DBFFIELD2</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 </blockquote>
-<h3 id="关于工作"><a href="#关于工作" class="headerlink" title="关于工作"></a>关于工作</h3><blockquote>
+<blockquote>
 <ul>
-<li>第一份工作，坐标海口<br>大三花了半年的时间在国家航测局第四航测遥感院实习。彼时对自己专业没什么了解，总想知道  自己花四年时间学的专业到底能干什么。半年实习结束，本就对专业无兴趣的我，更坚定了信念。</li>
-<li>第二份工作，坐标济南<br>大四不知为什么，稀里糊涂就去了国土测绘院。主要工作与大三实习大同小异。最后过了实习期，&gt;决定转行，去做了两个月通信线路设计。无奈身体实在吃不消，最后回到青岛开始了码农生涯。</li>
-<li>第三分工作，坐标青岛<br>开始了全职码农生涯。从桌面，到web到数据库有什么项目就做什么事。</li>
-<li>如今，坐标帝都<br>算是初创公司，在做自己的产品。既与自己专业相关，又与自己兴趣相宜。很是幸运。</li>
+<li><p>-S</p>
+<p>创建简单的几何对象而不是MULTI几何对象。只有shp数据中所有feature都为简单对象时才能成果（比如MULTIPOLYGON只包含一个面，MULTIPOINT只包含一个点）。</p>
+</li>
+<li><p>-t <dimensionality></dimensionality></p>
+<p>强制输出具有指定维度的空间几何数据。使用以下字符串表示维度：2D、3dz、3SM、4d。</p>
+<p>如果输入shp文件维度小于指定维度，输出数据中缺少的维度将以0填充。如果输入的shp文件维度大于指定维度，多余维度将被舍去。</p>
+</li>
+<li><p>-w</p>
+<p>以WKT格式输出，而不是WKB。请注意，由于精度损失可能导致数据偏移。</p>
+</li>
+<li><p>-e</p>
+<p>在不使用事务的情况下独立执行每个语句。这样，当一部分几何图形产生错误时，仍然可以加载其余数据。注意，这不能和-D一起使用，因为“dump”格式总是使用事务。</p>
+</li>
+<li><p>-W <encoding></encoding></p>
+<p>指定输入矢量文件（DBF文件）的编码格式。使用时，所有的DBF数据都会从指定编码转换成UTF-8。输出的SQL文件将包含一条命令：SET CLIENT_ENCODING to UTF8，这样后台就能将数据从UTF-8转换成数据库内部使用的任意编码。</p>
+</li>
+<li><p>-N <policy></policy></p>
+<p>空几何类型的处理策略（插入*、跳过或终止）</p>
+</li>
+<li><p>-n</p>
+<p>只导入DBF文件的数据。如果矢量文件没有对应的.shp图形就，将自动切换到该模式，只导入DBF。所以只有矢量文件完整且只希望导入属性表不导入几何图形的情况才需要使用该模式。</p>
+</li>
+<li><p>-G</p>
+<p>在WGS84经纬度参考（SRID=4326）中使用geography类型，而不是geometry。</p>
+</li>
+<li><p>-T <tablespace></tablespace></p>
+<p>为新创建的表指定表空间。除非使用了-X参数，否则索引仍将使用默认表空间。关于何时使用自定义表空间PostgreSQL文档有详细说明。</p>
+</li>
+<li><p>-X <tablespace></tablespace></p>
+<p>为新创建的表索引指定表空间。适用于主键索引，当使用-I参数时也适用于GIST空间索引</p>
+</li>
 </ul>
 </blockquote>
-<h3 id="关于爱好"><a href="#关于爱好" class="headerlink" title="关于爱好"></a>关于爱好</h3><p>第一爱好<code>搬砖</code>（认真起来一天茶饭不思）、第二<code>唱歌</code>（可通宵唱不停）、第三<code>独处发呆</code>（不说一句话）</p>
-<h3 id="联系我"><a href="#联系我" class="headerlink" title="联系我"></a>联系我</h3><blockquote>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>使用shp2pgsql创建SQL文件并导入数据库的过程如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># shp2pgsql -c -D -s 4269 -i -I shaperoads.shp myschema.roadstable &gt; roads.sql</span><br><span class="line"># psql -d roadsdb -f roads.sql</span><br></pre></td></tr></table></figure>
+<p>使用UNIX管道可以在 一个命令中完成矢量数据转换和入库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># shp2pgsql shaperoads.shp myschema.roadstable | psql -d roadsdb</span><br></pre></td></tr></table></figure>
+<h2 id="了解更多"><a href="#了解更多" class="headerlink" title="了解更多"></a>了解更多</h2><p>了解更多关于PostGIS的知识请参阅以下链接：</p>
 <ul>
-<li>Blog: <a href="http://yxqblog.tk">yxqblog.tk</a></li>
-<li>Email: <a href="mailto:bayberryan@hotmail.com" target="_blank" rel="noopener">bayberryan@hotmail.com</a></li>
-<li>Github: <a href="https://github.com/bayberryan" target="_blank" rel="noopener">bayberryan</a></li>
-<li>Linkedin: <a href="https://www.linkedin.com/in/bayberryan" target="_blank" rel="noopener">bayberryan</a></li>
+<li><a href="http://postgis.net/docs/" target="_blank" rel="noopener">PostGIS 2.4.4 Dev Manual</a></li>
 </ul>
-</blockquote>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2018年03月26日 17:36</p>
-        <p>原始链接： <a class="post-url" href="/about/index.html" title="about">http://yxqblog.tk/about/index.html</a></p>
+        <p>最后更新： 2018年03月28日 21:28</p>
+        <p>原始链接： <a class="post-url" href="/2018/03/28/shp2pgsql/" title="shp2pgsql工具详解">http://yxqblog.tk/2018/03/28/shp2pgsql/</a></p>
         <footer>
             <a href="http://yxqblog.tk">
                 <img src="/images/logo.png" alt="RickerYan">
@@ -229,7 +296,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/about/&title=《about》 — RickerYan&pic=http://yxqblog.tkimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2018/03/28/shp2pgsql/&title=《shp2pgsql工具详解》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/20180326.jpg?imageslim" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -239,22 +306,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/about/&title=《about》 — RickerYan&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2018/03/28/shp2pgsql/&title=《shp2pgsql工具详解》 — RickerYan&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/about/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2018/03/28/shp2pgsql/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《about》 — RickerYan&url=http://yxqblog.tk/about/&via=http://yxqblog.tk" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shp2pgsql工具详解》 — RickerYan&url=http://yxqblog.tk/2018/03/28/shp2pgsql/&via=http://yxqblog.tk" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/about/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2018/03/28/shp2pgsql/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -264,7 +331,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/about/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2018/03/28/shp2pgsql/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -273,6 +340,17 @@
         <ul class="article-footer-menu">
             
             
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Shp/" class="color4">Shp</a>
+      
+    <a href="/tags/PostgreSQL/" class="color1">PostgreSQL</a>
+      
+    <a href="/tags/PostGIS/" class="color3">PostGIS</a>
+      
+  </li>
+
         </ul>
         
     </footer>
@@ -282,10 +360,20 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于本站"><span class="post-toc-text">关于本站</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于我"><span class="post-toc-text">关于我</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于工作"><span class="post-toc-text">关于工作</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于爱好"><span class="post-toc-text">关于爱好</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#联系我"><span class="post-toc-text">联系我</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#摘要"><span class="post-toc-text">摘要</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#shp2pgsql-gui"><span class="post-toc-text">shp2pgsql-gui</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#用法"><span class="post-toc-text">用法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#示例"><span class="post-toc-text">示例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解更多"><span class="post-toc-text">了解更多</span></a></li></ol>
         </nav>
     </aside>
     
+
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/26/Dev-Doc/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">常用软件开发文档及英文缩写</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
 
 
 
