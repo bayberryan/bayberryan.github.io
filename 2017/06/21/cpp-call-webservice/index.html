@@ -48,9 +48,6 @@
                 <a href="/" class="left">
                     <span class="site-title">RickerYan&#39;s Blog</span>
                 </a>
-				<div class="left">
-				<audio autoplay="autoplay" loop="loop" src="http://oqfoa6gjo.bkt.clouddn.com/Waiting%20for%20you%20to%20appear.mp3"/>
-				</div>
                 <nav id="header-menu-nav" class="right">
                     
                     <a  href="/">
@@ -113,7 +110,7 @@
         </div>
     </div>
 </header>
-      <div class="outer">
+	  <div class="outer">
         <section id="main" class="body-wrap"><article id="post-cpp-call-webservice" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -496,5 +493,47 @@
   </script>
 
   </div>
+  <link href="http://oqfoa6gjo.bkt.clouddn.com/player.css" rel="stylesheet" type="text/css">
+<div id="QPlayer">
+<div id="pContent">
+	<div id="player">
+		<span class="cover"></span>
+		<div class="ctrl">
+			<div class="musicTag marquee">
+				<strong>歌名</strong>
+				<span> - </span>
+				<span class="artist">歌手</span>
+			</div>
+			<div class="progress">
+				<div class="timer left">0:00</div>
+				<div class="contr">
+					<div class="rewind icon"></div>
+					<div class="playback icon"></div>
+					<div class="fastforward icon"></div>
+				</div>
+				<div class="right">
+					<div class="liebiao icon"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ssBtn">
+	<div class="adf"></div>
+    </div>
+</div>
+<ol id="playlist"></ol>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/jquery.marquee.min.js"></script>
+<script>
+	var	playlist = [
+	{title:"等待你出现",artist:"小野リサ",mp3:"http://oqfoa6gjo.bkt.clouddn.com/WaitingForYouToAppear.mp3",cover:"http://p1.music.126.net/nADBtcJPxutKp-GgVBJr1Q==/3416182635107199.jpg?param=130y130",},
+	{title:"DerniereValse",artist:"小野リサ",mp3:"http://oqfoa6gjo.bkt.clouddn.com/DerniereValse.mp3",cover:"http://p1.music.126.net/ct9__63pe8dBv6BOiuOQVA==/1714138627716438.jpg?param=130y130",},
+	{title:"StarryStarryNight",artist:"Lianne La",mp3:"http://oqfoa6gjo.bkt.clouddn.com/StarryStarryNight.mp3",cover:"http://p1.music.126.net/a-zKtVuG1UCfDq313hsm9g==/18337654928626469.jpg?param=130y130",},		
+];
+  var isRotate = true;
+  var autoplay = true;
+</script>
+<script src="/js/player.js"></script>
 </body>
 </html>
