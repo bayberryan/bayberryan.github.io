@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170715-1.jpg?imageslim">
 <meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170715-2.jpg?imageslim">
 <meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170715-3.jpg?imageslim">
-<meta property="og:updated_time" content="2018-03-25T08:55:20.055Z">
+<meta property="og:updated_time" content="2018-04-05T08:29:09.990Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git SSH 配置及使用">
 <meta name="twitter:description" content="在管理Git项目上，很多时候都是直接使用https url克隆到本地，当然也有有些人使用SSH url克隆到本地。 这两种方式的主要区别在于：使用https url克隆对初学者来说会比较方便，复制https url然后到git Bash里面直接用clone命令克隆到本地就好了，但是每次fetch和push代码都需要输入账号和密码，这也是https方式的麻烦之处。 而使用SSH url克隆却需要在克">
@@ -162,7 +162,7 @@
 </ul>
 <h2 id="设置Git的user-name和email"><a href="#设置Git的user-name和email" class="headerlink" title="设置Git的user name和email"></a>设置Git的user name和email</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 这里的“xujun&quot; 可以替换成自己的用户名</span><br><span class="line">git config --global user.name &quot;xujun&quot;</span><br><span class="line"># 这里的邮箱 gdutxiaoxu@163.com  替换成自己的邮箱</span><br><span class="line">git config --global user.email  &quot;gdutxiaoxu@163.com&quot;</span><br></pre></td></tr></table></figure>
 <h2 id="检查是否已经有SSH-Key"><a href="#检查是否已经有SSH-Key" class="headerlink" title="检查是否已经有SSH Key"></a>检查是否已经有SSH Key</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
-<p>列出该文件下的文件，看是否存在 id_isa 和 id_isa.pub 文件（也可以是别的文件名，只要 yourName 和 yourName.pub 承兑存在），如果存在的话，证明已经存在 ssh key了，可以直接跳过 <em>生成密钥</em> 这一步骤，下图是存在的情况</p>
+<p>列出该文件下的文件，看是否存在 id_isa 和 id_isa.pub 文件（也可以是别的文件名，只要 yourName 和 yourName.pub 成对存在），如果存在的话，证明已经存在 ssh key了，可以直接跳过 <em>生成密钥</em> 这一步骤，下图是存在的情况</p>
 <p><img src="http://oqfoa6gjo.bkt.clouddn.com/20170715-1.jpg?imageslim" alt=""></p>
 <h2 id="生成密钥"><a href="#生成密钥" class="headerlink" title="生成密钥"></a>生成密钥</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 这里的邮箱 name@mail.com  替换成自己的邮箱</span><br><span class="line">ssh-keygen -t rsa -C &quot;name@mail.com&quot;</span><br></pre></td></tr></table></figure>
 <p>连续3个回车。如果不需要密码的话。<br>最后得到了两个文件：id_rsa和id_rsa.pub。</p>
@@ -189,7 +189,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2018年03月25日 16:55</p>
+        <p>最后更新： 2018年04月05日 16:29</p>
         <p>原始链接： <a class="post-url" href="/2017/07/15/Git-SSH-配置及使用/" title="Git SSH 配置及使用">http://yxqblog.tk/2017/07/15/Git-SSH-配置及使用/</a></p>
         <footer>
             <a href="http://yxqblog.tk">
