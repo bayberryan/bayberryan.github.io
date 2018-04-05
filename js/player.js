@@ -10,6 +10,13 @@
 		isShuffle = localStorage.qplayer == undefined? false: localStorage.qplayer === 'true'? true: false;
 
 	// Load playlist
+	if (!Array.prototype.shuffle) {
+     Array.prototype.shuffle = function() {
+         for(var j, x, i = this.length; i; j = parseInt(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
+         return this;
+     };
+	}
+	playlist.shuffle();
 	for (var i = 0; i < playlist.length; i++){
 		var item = playlist[i];
 		$('#playlist').append('<li class="lib" style="overflow:hidden;"><strong style="margin-left: 5px;">'+item.title+'</strong><span style="float: right;" class="artist">'+item.artist+'</span></li>');
