@@ -13,7 +13,7 @@
 <meta name="keywords" content="QT,C++,qtsoap,gsoap,WebService">
 <meta property="og:type" content="article">
 <meta property="og:title" content="QT调用WebService的尝试和最终实现">
-<meta property="og:url" content="http://yxqblog.tk/2017/06/21/cpp-call-webservice/index.html">
+<meta property="og:url" content="http://rickeryan.tk/2017/06/21/cpp-call-webservice/index.html">
 <meta property="og:site_name" content="RickerYan">
 <meta property="og:description" content="最近接触的QT项目与平台对接时需要用到WebService。博主从毕业起大部分工作都是在做桌面开发，所以对WebService只能说是一知半解。唯一的接触就是在.NET平台下编写，发布和调用WebService。这其中大部分工作微软都帮我们做好了，我们只需添加web引用，就像引用本地的库一样。不得不说VS确实强大且易用性好。但是很多事情都是两面性的。就像现在习惯了vs的方便，当面临linux">
 <meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20170621err.png?imageslim">
@@ -101,7 +101,7 @@
             <nav class="header-nav">
                 <div class="social">
                     
-                        <a title="RickerYan" target="_blank" href="//yxqblog.tk">
+                        <a title="RickerYan" target="_blank" href="//rickeryan.tk">
                             <i class="fa fa-home fa-2x"></i></a>
                     
                         <a title="Github" target="_blank" href="//github.com/bayberryan">
@@ -183,9 +183,9 @@
             <div class="post-copyright">
     <div class="content">
         <p>最后更新： 2018年03月25日 15:16</p>
-        <p>原始链接： <a class="post-url" href="/2017/06/21/cpp-call-webservice/" title="QT调用WebService的尝试和最终实现">http://yxqblog.tk/2017/06/21/cpp-call-webservice/</a></p>
+        <p>原始链接： <a class="post-url" href="/2017/06/21/cpp-call-webservice/" title="QT调用WebService的尝试和最终实现">http://rickeryan.tk/2017/06/21/cpp-call-webservice/</a></p>
         <footer>
-            <a href="http://yxqblog.tk">
+            <a href="http://rickeryan.tk">
                 <img src="/images/logo.png" alt="RickerYan">
                 RickerYan
             </a>
@@ -240,7 +240,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2017/06/21/cpp-call-webservice/&title=《QT调用WebService的尝试和最终实现》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/20170621qsoap.png?imageslim" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://rickeryan.tk/2017/06/21/cpp-call-webservice/&title=《QT调用WebService的尝试和最终实现》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/20170621qsoap.png?imageslim" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -250,22 +250,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2017/06/21/cpp-call-webservice/&title=《QT调用WebService的尝试和最终实现》 — RickerYan&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://rickeryan.tk/2017/06/21/cpp-call-webservice/&title=《QT调用WebService的尝试和最终实现》 — RickerYan&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2017/06/21/cpp-call-webservice/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://rickeryan.tk/2017/06/21/cpp-call-webservice/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《QT调用WebService的尝试和最终实现》 — RickerYan&url=http://yxqblog.tk/2017/06/21/cpp-call-webservice/&via=http://yxqblog.tk" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《QT调用WebService的尝试和最终实现》 — RickerYan&url=http://rickeryan.tk/2017/06/21/cpp-call-webservice/&via=http://rickeryan.tk" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2017/06/21/cpp-call-webservice/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://rickeryan.tk/2017/06/21/cpp-call-webservice/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -275,7 +275,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2017/06/21/cpp-call-webservice/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://rickeryan.tk/2017/06/21/cpp-call-webservice/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -387,7 +387,7 @@
 <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
   var mihoConfig = {
-      root: "http://yxqblog.tk",
+      root: "http://rickeryan.tk",
       animate: true,
       isHome: false,
       share: true,

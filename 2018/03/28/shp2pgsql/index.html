@@ -13,7 +13,7 @@
 <meta name="keywords" content="Shp,PostgreSQL,PostGIS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="shp2pgsql工具详解">
-<meta property="og:url" content="http://yxqblog.tk/2018/03/28/shp2pgsql/index.html">
+<meta property="og:url" content="http://rickeryan.tk/2018/03/28/shp2pgsql/index.html">
 <meta property="og:site_name" content="RickerYan">
 <meta property="og:description" content="摘要翻译至PostGis 2.4.4 Dev Manual 4.4.2 有删减。英文水平有限，错漏之处敬请告知。 shp2pgsql 是PostgreSQL提供的入库工具。能够将 ESRI Shape file转换成可插入PostGIS/PostgreSQL的SQL语句。虽然PostGIS提供了可视化的入库工具shp2pgsql-gui，但易用性欠佳。我们可以通过熟悉shp2pgsql然后开发易用">
 <meta property="og:image" content="http://oqfoa6gjo.bkt.clouddn.com/20180326-1.jpg?imageslim">
@@ -99,7 +99,7 @@
             <nav class="header-nav">
                 <div class="social">
                     
-                        <a title="RickerYan" target="_blank" href="//yxqblog.tk">
+                        <a title="RickerYan" target="_blank" href="//rickeryan.tk">
                             <i class="fa fa-home fa-2x"></i></a>
                     
                         <a title="Github" target="_blank" href="//github.com/bayberryan">
@@ -245,9 +245,9 @@
             <div class="post-copyright">
     <div class="content">
         <p>最后更新： 2018年03月28日 21:35</p>
-        <p>原始链接： <a class="post-url" href="/2018/03/28/shp2pgsql/" title="shp2pgsql工具详解">http://yxqblog.tk/2018/03/28/shp2pgsql/</a></p>
+        <p>原始链接： <a class="post-url" href="/2018/03/28/shp2pgsql/" title="shp2pgsql工具详解">http://rickeryan.tk/2018/03/28/shp2pgsql/</a></p>
         <footer>
-            <a href="http://yxqblog.tk">
+            <a href="http://rickeryan.tk">
                 <img src="/images/logo.png" alt="RickerYan">
                 RickerYan
             </a>
@@ -302,7 +302,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yxqblog.tk/2018/03/28/shp2pgsql/&title=《shp2pgsql工具详解》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/20180326.jpg?imageslim" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://rickeryan.tk/2018/03/28/shp2pgsql/&title=《shp2pgsql工具详解》 — RickerYan&pic=http://oqfoa6gjo.bkt.clouddn.com/20180326.jpg?imageslim" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -312,22 +312,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yxqblog.tk/2018/03/28/shp2pgsql/&title=《shp2pgsql工具详解》 — RickerYan&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://rickeryan.tk/2018/03/28/shp2pgsql/&title=《shp2pgsql工具详解》 — RickerYan&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yxqblog.tk/2018/03/28/shp2pgsql/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://rickeryan.tk/2018/03/28/shp2pgsql/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shp2pgsql工具详解》 — RickerYan&url=http://yxqblog.tk/2018/03/28/shp2pgsql/&via=http://yxqblog.tk" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《shp2pgsql工具详解》 — RickerYan&url=http://rickeryan.tk/2018/03/28/shp2pgsql/&via=http://rickeryan.tk" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yxqblog.tk/2018/03/28/shp2pgsql/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://rickeryan.tk/2018/03/28/shp2pgsql/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -337,7 +337,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yxqblog.tk/2018/03/28/shp2pgsql/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://rickeryan.tk/2018/03/28/shp2pgsql/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -445,7 +445,7 @@
 <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
   var mihoConfig = {
-      root: "http://yxqblog.tk",
+      root: "http://rickeryan.tk",
       animate: true,
       isHome: false,
       share: true,
